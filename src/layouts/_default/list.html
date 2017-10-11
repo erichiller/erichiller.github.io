@@ -1,0 +1,26 @@
+{{ partial "head" . }}
+<body>
+    
+    {{ partial "off-canvas" . }}
+
+    <div class="site-wrapper">
+        {{ partial "header" . }}
+
+		<main>
+			<h1 class="page-list-title" itemprop="tag"><a href="">{{ .Title }}</a></h1> 
+			<ul class="posts">
+			{{ range $index, $pg := .Paginator.Pages }}
+				{{ .Render "li" }}
+			{{ end }}
+			</ul>
+			{{ partial "pagination" . }}
+		</main><!--
+		-->{{ partial "footer" . }}
+		
+
+
+    </div>
+    
+    {{ partial "js" . }}
+</body>
+</html>

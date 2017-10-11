@@ -1,0 +1,6 @@
+{{ $baseurl := .Site.BaseURL }}
+<div class="taglist">
+{{if .Params.tags }}
+	{{ range $index, $tag := .Params.tags }}<span></span><a href="{{ $baseurl }}tags/{{ $tag | urlize }}/">{{ $tag }}</a>{{ end }}
+{{ end }}
+</div>

@@ -1,0 +1,69 @@
+.searchbox {
+	text-align: center;
+	ul li {
+		list-style-type: none;
+		padding: $spacing-xs 0;
+		position: relative;
+		border-bottom: 1px solid $border-bright;
+		text-align: left;
+		&:first-child {
+			border-top: initial;
+		}
+	}
+	 
+	h5 {
+		text-align: center;
+		border-bottom: 1px solid $border-color;
+		margin: 0 auto;
+		padding: $spacing-xs;
+	}
+	.taglist {
+		display: inline-block;
+		padding-left: 30px;
+		position: absolute;
+		right: 0;
+	}
+	#search {
+		background-color: $smoke-color;
+		border: 1px solid darken($smoke-color,35%);
+		margin: $spacing-xs 0;
+	}
+	.titlelink {
+		text-align: center;
+		@extend %transition-fast;
+		color: $text-light;
+		text-decoration:none;
+		
+		/** reenable if this works -- kill all these effects for mobile
+		@media (max-width: 942px) {
+			content: none;
+			margin: 0;
+		}
+		**/
+		&::before {		
+			font-family: 'FontAwesome';
+			content:'\f138';
+			position: relative;
+			opacity: 0;
+			top: -2px;
+			right: $spacing-s;
+
+			@extend %transition-medium;
+		}
+		&:hover {
+			color: $main-color;
+			/** EH MOD
+			background: lighten($main-color, 3%);
+			-webkit-transform: translateX($spacing-s);
+			-ms-transform: translateX($spacing-s);
+			transform: translateX($spacing-s);
+			**/
+			
+			&::before {
+				opacity: 1;
+				top: -2px;
+				right: 10px;
+			}
+		}
+	}
+}

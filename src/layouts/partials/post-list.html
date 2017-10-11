@@ -1,0 +1,35 @@
+{{ $baseurl := .Site.BaseURL }}<!--
+--><main>
+    <div id="home">
+        <ul class="posts">
+        {{ $paginator := .Paginate (where .Data.Pages.ByDate.Reverse "Type" "blog") 3 }}
+        {{ range $index, $pg := $paginator.Pages }}
+            <li itemscope itemtype="//schema.org/BlogPosting">
+				<div class="p-wrap">
+					<a href="{{ .Permalink }}" itemprop="url">
+						<span itemprop="name headline">{{ .Title }}</span><br/>
+						<time datetime="" itemprop="datePublished">
+							{{ .Date.Format "02 Jan 2006" }}
+						</time>
+					</a>
+					{{ partial "taglist" . }}
+					<a href="{{ .Permalink }}" itemprop="url" class="summary">
+						{{ if and (eq $index 0) (eq .URL "")}}
+							<p>
+							{{ if .Params.page_summary }}
+								{{ .Params.page_summary | markdownify }}
+							{{ else }}
+								{{ .Summary }}
+							{{ end}}
+							{{ if .Truncated }}
+								<span class="read-more">Read More</span> 
+							{{ end }}
+							</p>
+						{{ end }}
+					</a>
+				</div>
+            </li>
+        {{ end }}
+        </ul>
+    </div>
+</main>

@@ -1,0 +1,39 @@
+<div class="off-canvas">
+    <figure class="avatar">
+        <a href="/"><img src="{{ .Site.BaseURL }}img/avatar.jpg" title="{{ with .Site.Params.name }}{{ . }}{{ end }}"></a>
+    </figure>
+    <div class="bio">
+        {{ with .Site.Params.offcanvas.title }}
+            <h1>{{ . }}</h1>
+        {{ end }}
+        {{ with .Site.Params.offcanvas.bio }}
+            <p>{{ . | markdownify }}</p>
+        {{ end }}
+    </div>
+	
+	<nav>
+		<h6>Main</h6>
+		{{ $currentNode := . }}
+		{{ range .Site.Menus.site }}
+			{{ if .HasChildren }}
+				<h6>{{ .Name }}</h6>
+				{{ range .Children }}
+					<a class="sidebar-nav-item{{if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }} active{{end}}" href="{{.URL}}">{{ .Name }}</a><br />
+				{{ end }}				
+			{{ else }}
+				<a class="sidebar-nav-item{{if or ($currentNode.IsMenuCurrent "main" .) ($currentNode.HasMenuCurrent "main" .) }} active{{end}}" href="{{.URL}}">{{ .Name }}</a><br />
+			{{ end }}
+		{{ end }}
+	</nav>
+	
+	<div class="rss">
+		<h6>Subscribe to Updates</h6>
+		<a class="rss" href="/index.xml">RSS News Feed</a>
+	</div>
+	<div id="find-me-on">
+		<h6>Find Me On</h6>
+		<a href="http://github.com/{{ .Site.Params.gituser }}" class="github">GitHub</a>
+		<a href="{{ .Site.Params.linkedin }}" class="linkedin-share">LinkedIn</a>
+	</div>
+	
+</div>

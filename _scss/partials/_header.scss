@@ -1,0 +1,219 @@
+header {
+	width: 100%;
+	background: white;
+	position: fixed;
+	z-index: 60;
+  	.readProgressBar {
+		background-color: rgba(224,230,229,1);
+		width: 0%;
+		display: block;
+		position: fixed;
+		left: 0;
+		height: 1px;
+	}
+}
+
+.h-wrap {
+	//EH MOD @extend %padding-large;
+
+	text-align: center;
+	padding-top: $spacing-s;
+	padding-bottom: $spacing-s;
+	margin-bottom: 0;
+	border-bottom: 1px solid $border-color;
+	
+
+	
+	
+	h1.title {
+		//EH MOD 
+		@extend h3;
+		//font-size: 180%; 
+		//margin: $spacing-xs 0;
+		display: inline-block;
+		margin: 0;
+		padding: 0;
+		// font-weight: normal;
+		
+		a {
+			//EH MOD - reversed link and text color here
+			color: $link-color;
+			text-decoration: none;
+			&:hover {
+				color: $text-color;
+				@extend %transition-slow;
+			}
+		}
+	} // end h1.title
+} // end .h-wrap
+#header-tagline {
+	margin: 0;
+	font-weight: lighter;
+	padding: $spacing-xs;
+	border-bottom: 1px solid $border-color;
+}
+#h-space {
+	margin-top: 7.5625em;
+}
+.menu-icon {
+	@extend %padding-regular;
+	position: fixed;
+	left: 0;
+	cursor: pointer;
+	z-index: 256;
+	
+	
+	&:hover {
+		opacity: 1;
+	}
+	
+	.lines {
+		display: inline-block;
+		position: relative;
+		width: 25px;
+		height: 2px;
+		background: $text-color;
+		border-radius: 20px;
+		
+		&::before,
+		&::after {
+			@extend %transition;
+			
+			content: '';
+			display: inline-block;
+			position: absolute;
+			left: 0;
+			width: 25px;
+			height: 2px;
+			background: $text-color;
+			border-radius: 20px;
+		}
+		
+		&::before { top: 8px; }
+		
+		&::after { top: -8px; }
+		
+		&.toggled {
+			background: transparent;
+			
+			&::before {
+				-webkit-transform: translateX(-8px) rotate(45deg);
+				transform:         translateX(-8px) rotate(45deg);
+			}
+			
+			&::after {
+				top: 0;
+				-webkit-transform: translateX(8px) rotate(-45deg);
+				transform:         translateX(8px) rotate(-45deg);
+			}			
+		} // end .toggled
+	} // end .lines
+	&.close {
+		.lines {
+			background: transparent;
+			
+			&::before,
+			&::after {
+				top:0;
+				width: 30px;
+	
+				@extend %transition;
+				
+			}
+			
+			&::before {
+				-webkit-transform: rotate(45deg);
+				transform:         rotate(45deg);
+				margin: 0;
+			}
+			
+			&::after {
+				-webkit-transform: rotate(-45deg);
+				transform:         rotate(-45deg);
+				margin: 0;
+			}
+		
+		} // end .lines
+	} // end .close
+} // end .menu-icon
+
+
+
+// Off-canvas
+
+.site-wrapper {
+  @extend %transition;
+  position: absolute;
+  right: 0;
+  left: 0;
+  width: 100%;
+  &.open {
+    .menu-icon {
+      position: fixed;
+    }
+  }
+}
+
+.off-canvas {
+	@extend %padding-large;
+	transition: transform .3s ease;
+	position: fixed;
+	top: 0;
+	left: -25em;
+	width: 25em;
+	height: 100%;
+	background: $smoke-color;
+	z-index: 100;
+	overflow: auto;
+	text-align: right;
+	
+	// insuring that off-canvas doesn't take more than the average iPhone portrait width under 400px
+	@media (max-width: 399px) {
+		max-width: 320px;
+	}
+	
+	&.toggled {
+		-webkit-transform: translateX(25em);
+		transform:         translateX(25em);
+		border-right: 1px solid $border-color;
+	}
+	
+	.avatar {
+		display: block;
+		margin-bottom: $spacing-s;
+		img {
+			width: 6em;
+			height: 6em;
+			border-radius: 50%;
+		}
+	} // end .avatar
+
+	.bio {
+		display: block;
+		h1 {
+			@extend h3;
+			margin: 0;
+		}
+		p {
+			font-size: 90%;
+			color: lighten($text-color, 30%);
+			margin-bottom: 0;
+		}
+	}
+
+	h6 {
+		text-align: left;
+		margin-top: $spacing-m;
+		margin-bottom: $spacing-s;
+		color: lighten($text-color, 50%);
+		padding-bottom: $spacing-xs;
+		border-bottom: 1px solid $border-color;
+	}
+	nav a {
+		display: inline-block;
+		text-decoration: none;
+		padding-top: $spacing-xs 0;
+	}
+
+
+} // end .off-canvas

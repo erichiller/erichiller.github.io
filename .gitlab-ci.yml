@@ -1,0 +1,29 @@
+image: ehiller/hillerpro-build
+
+before_script:
+  - npm install
+  - npm update
+  - npm run build-sass
+  - npm run build-grunt
+
+pages:
+  stage: deploy
+  script:
+  - hugo --verbose --source=src --destination=public
+  artifacts:
+    paths:
+    - public
+  only:
+  - master
+
+test:
+  stage: test
+  script:
+  - hugo --verbose --source=src --destination=public
+  except:
+  - master
+
+
+
+# see https://gitlab.com/pages/hugo/blob/master/.gitlab-ci.yml
+

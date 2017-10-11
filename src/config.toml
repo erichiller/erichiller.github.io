@@ -1,0 +1,77 @@
+# see https://gohugo.io/overview/configuration/ for more information
+baseurl = "http://hiller.pro/"
+languageCode = "en-us"
+title = "Hiller.pro"
+canonifyurls = true
+defaultLayout = "main"
+# Editor to use for hugo new contenttype/title.md command
+newContentEditor = "C:\\Program Files (x86)\\Microsoft VS Code\\code.exe"
+archetypedir = "archetypes"
+footnoteAnchorProfix = "^"
+
+# items per page in list
+paginate = 5
+
+pluralizelisttitles = false
+
+[taxonomies]
+	# tags are for subjects discussed in the article, for example for news about military action in the middle east, for example:
+	# Obama, Kuwait, middle east, war, miliary, weapons, islam, Russia, ISIS 
+	tag = "tags"
+
+[permalinks]
+	# set the url for blog posts to: (slug replaced with title if not set)
+	blog = "/:year/:month/:day/:slug"
+
+[params]
+	name = "Eric Hiller"
+	description = "Knowledge Base and Blog for Eric Hiller"
+	copyright = "Eric Hiller"
+	gituser = "erichiller"
+	linkedin = "http://www.linkedin.com/in/ericdhiller"
+
+	# Enable comments by entering your Disqus shortname
+	disqusshortname = "erichiller"
+	
+	# Enable Google Analytics by entering your tracking code
+	googleanalytics = "UA-40202820-3"
+
+	# Links to newer/older blog posts
+	newer = "Newer"
+	older = "Older"
+
+	pageNotFoundTitle = "Page not found"
+	pageNotFoundSubtitle = "Sorry, but the requested page wasn't found on the server."
+
+[params.offcanvas]
+	# Menu items
+	title = "Welcome, I'm Eric Hiller"
+	bio = "Topical news and Information collected across the years from the network, telecom, software, and general science and technology fields."
+		
+[sitemap]
+	changefreq = "daily"
+	
+[[menu.site]]
+	name = "Home"
+	weight = 0
+	url = "/"
+[[menu.site]]
+	name = "About"
+	weight = 10
+	url = "/about"
+[[menu.site]]
+	name = "Search"
+	weight = 11
+	url = "/search"
+[[menu.site]]
+	name = "Blog"
+	weight = 20
+	url = "/blog"
+[[menu.site]]
+	name = "Knowledge Base"
+	weight = 30
+	url = "/kb"
+[[menu.site]]
+	name = "Code"
+	weight = 40
+	url = "/code"

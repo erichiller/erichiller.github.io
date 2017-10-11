@@ -1,0 +1,6 @@
+#see: https://git-scm.com/docs/gitignore
+*.DS_Store
+*.swp
+node_modules
+hugo.exe
+package-lock.json

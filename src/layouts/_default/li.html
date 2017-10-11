@@ -1,0 +1,18 @@
+{{ $baseurl := .Site.BaseURL }}
+<li itemscope itemtype="//schema.org/BlogPosting">
+<div class="p-wrap">
+	<a href="{{ .Permalink }}" itemprop="url">
+		<span itemprop="name headline">{{ .Title }}</span><br/>
+		<time datetime="" itemprop="datePublished">
+			{{ .Date.Format "02 Jan 2006" }}
+		</time>
+	</a>
+	<div class="taglist">
+	{{if .Params.tags }}
+		{{ range $index, $tag := .Params.tags }}
+			<span></span><a href="{{ $baseurl }}tags/{{ $tag | urlize }}/">{{ $tag }}</a>
+		{{ end }}
+	{{ end }}
+	</div>
+</div>
+</li>

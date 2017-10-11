@@ -1,0 +1,23 @@
+%transition {
+  transition: all .3s ease;
+}
+%transition-fast {
+  transition: all .75s ease;
+  -webkit-transition: all .75s ease;
+}
+%transition-medium {
+  transition: all 1s ease;
+  -webkit-transition: all 1s ease;
+}
+%transition-slow {
+  transition: all 2s ease;
+  -webkit-transition: all 2s ease;
+}
+
+%padding-regular {
+  padding: $spacing-s;
+}
+
+%padding-large {
+  padding: $spacing-m;
+}

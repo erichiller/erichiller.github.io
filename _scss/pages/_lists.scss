@@ -1,0 +1,38 @@
+h1.page-list-title {
+	font-size: 180%;
+	line-height: 135%;
+	font-family: $font-family;
+	text-align: center;
+	margin: 0 0 $spacing-s;
+}
+h1.page-list-title[itemprop="tag"] {
+	margin: 0;
+	text-decoration: underline;
+}
+.list-wrap {
+	width: 100%;
+	max-width: 740px;
+	margin: 0 auto;
+	overflow: auto;
+	h4 {
+		border-bottom: 1px solid $border-color;
+		padding-top: $spacing-s;
+	}
+	
+	ul {
+		width: 100%;
+		overflow: auto;
+		padding: 0;
+		margin: 0;
+		border: 0;
+	}
+	li {
+		float:left;
+		margin:0;
+		padding:$spacing-xs 0;
+		border:0;
+		list-style: none;
+		width: 50%;
+		font-size: 80%;
+	}
+}

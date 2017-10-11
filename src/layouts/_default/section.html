@@ -1,0 +1,46 @@
+{{ $title := ( .Title | lower ) }}
+{{ partial "head" . }}
+<body>
+    
+    {{ partial "off-canvas" . }}
+
+    <div class="site-wrapper">
+        {{ partial "header" . }}
+
+		<main>
+			<div class="list-wrap">
+				<h1 class="page-list-title" itemprop="tag"><a href="">
+					{{ if eq $title "kb"}}
+						Knowledge Base
+					{{ end }}
+					{{ if eq $title "blog" }}
+						Blog
+					{{ end }}
+				</a></h1> 
+	
+				{{ range $taxonomyname, $taxonomy := .Site.Taxonomies }}
+					{{ if eq "tags" $taxonomyname }}
+						{{ range $key, $value := $taxonomy }}
+							{{ $taxonomy_val_name := $key }}
+							{{ $pages := (where $value.Pages "Type" $title) }}
+							<ul>
+							{{ range $key,$ := $pages }}
+								{{ if eq $key 0 }}
+									<h4>{{ $taxonomy_val_name }}</h4>
+								{{ end }}
+								<li><a href="{{ .Permalink }}"> {{ .Title }} </a></li>
+							{{ end }}
+							</ul>
+						{{ end }}
+					{{ end }}
+				{{ end }}
+				<br>
+			</div>
+		</main><!--
+		-->{{ partial "footer" . }}
+
+    </div>
+    
+    {{ partial "js" . }}
+</body>
+</html>

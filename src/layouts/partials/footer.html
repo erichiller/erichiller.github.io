@@ -1,0 +1,8 @@
+<footer>
+	<small>
+	{{ with .Site.Params.copyright }}
+		{{ . | markdownify }}
+	{{ end }}
+	 © {{ dateFormat "2006" .Site.LastChange }}
+	</small>
+</footer>

@@ -1,0 +1,259 @@
+.repolist {
+	margin: 0 auto;
+	background-color: white;
+	text-align: center;
+	h5 {
+		font-size: 100%;
+		border-bottom: 1px solid $border-color;
+		margin: $spacing-xs 0;
+		padding-bottom: $spacing-xs;
+	}
+	a {
+		text-decoration: none;
+		margin: $spacing-xs auto;
+		background-color:lighten($text-light, 59%);
+		display: inline-block;   
+		line-height: $spacing-s;
+		padding:0.3em 0.6em 1em 0.6em;
+		font-family: "Open Sans", sans-serif;
+		letter-spacing:0.05em;
+		border-radius:0.5em;
+		border: .15em solid $border-color;
+		-moz-border-radius: 0.5em;
+		-webkit-border-radius: 0.5em;
+		color: $text-color;
+		min-width: 50%;
+		
+		@extend %transition-fast;
+		&:hover {
+			color: $main-color;
+		}
+	}
+	p {
+		margin: $spacing-xs 0;
+	}
+
+	span.watch {
+		display: inline-block;
+		margin: 0 $spacing-xs;
+		&::before {
+			right: 5px;
+			position: relative;
+			content: '\f06e';
+			font-family: 'FontAwesome';
+		}
+	}
+	
+	span.star {
+		&::before {
+			right: 5px;
+			position: relative;
+			content: "\f005";
+			font-family: 'FontAwesome';
+		}
+	}
+	span.github {
+		font-size: 70%;
+		&::before {
+			font-size: 150%;
+			right: 5px;
+			position: relative;
+			content: "\f09b";
+			font-family: 'FontAwesome';
+		}
+	}
+
+}
+.main-content {
+	@extend .center-column;
+	max-width: $main-page-width;
+	position: relative;
+	img {
+		width: 50%;
+		float: left;
+		padding-right: 15px;
+	}
+}
+
+.share-bar {
+	text-align: center;
+	border-bottom: 1px dotted $border-color;
+	margin: 0 auto;
+	padding: $spacing-xs;
+	a:first-child {
+		margin-left: 0;
+	}
+	a:last-child {
+		margin-right: 0;
+	}
+	a {
+		color: $text-color;
+		display: inline-block;
+		
+		padding: $spacing-xs;
+		margin: $spacing-xs;
+		border-radius:0.5em;
+		border: 1px solid $border-color;
+		/**
+		background-image: radial-gradient(darken($border-bright, 7%),white);
+		border: 1px dotted $border-bright;
+		**/
+		text-decoration: none;
+		@extend %transition-fast;
+		&:hover {
+			color: $main-color;
+			background-color: $smoke-color;
+		}
+	}
+}
+.off-canvas {
+	#find-me-on {
+		position: initial;
+		bottom: initial;
+		right: initial;
+		padding: 0;
+		a {
+			display: inline-block;
+			padding: 0 $spacing-xs;
+		}
+	}
+}
+#find-me-on {
+	position: absolute;
+	bottom: 5px;
+	right: 20px;
+	text-align: center;
+	a {
+		display: block;
+		text-decoration: none;
+		padding: $spacing-xs;
+	}
+}
+.before-icon {
+	right: 5px;
+	position: relative;
+	font-family: 'FontAwesome';
+}
+.rss {
+	margin: 0 auto;
+	text-align: center;
+	a {
+		text-decoration: none;
+		&::before {
+			@extend .before-icon;
+			content: "\f09e";
+		}
+	}
+}
+#float-social-wrap {
+	position: fixed;
+	top: 10em;
+	margin-left: 50%;
+	left: 0;
+}
+#float-social {
+	position: static;
+	top: 10em;
+	font-size: 120%;
+	background-color: rgba(224,224,229,.35);
+	margin-left: 16.66em;
+	border-radius: .4em;
+	padding: .2em;
+}
+#float-social a {
+	@extend %transition-fast;
+	display: block;
+	margin: .6em .1em;
+	text-decoration: none;
+	text-align: center;
+	color: $text-color;
+}
+#float-social a:hover {
+	color: $main-color;
+	background-color: $smoke-color; 
+}
+#float-social a::before {
+	right: 0px;
+}
+.github {
+	&::before {
+	@extend .before-icon;
+		content: "\f09b";
+
+	}
+}
+.reddit-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f1a1";
+	}
+}
+.facebook-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f09a";
+	}
+}
+.linkedin-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f0e1";
+	}
+}
+.twitter-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f099";
+	}
+}
+.email-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f003";
+	}
+}
+
+.page-title {
+
+	text-align: center;
+	position: relative;
+	@extend %transition-fast;
+	
+	/** reenable if this works -- kill all these effects for mobile
+	@media (max-width: 942px) {
+		content: none;
+		margin: 0;
+	}
+	**/
+
+	&::before {
+		content:'\2192';
+		position: absolute;
+		opacity: 0;
+		top: -2px;
+		right:103%;
+		text-decoration: none;
+		@extend %transition-medium;
+	}
+	&::after {
+		content:'\2190';
+		position: absolute;
+		opacity: 0;
+		left: 103%;
+		@extend %transition-medium;
+		text-decoration: none;
+		top: -2px;
+	}
+
+	&:hover {
+		color: $main-color;
+		&::before {
+			opacity: 1;
+			right:101%;
+		}
+		&::after {
+			opacity: 1;
+			left: 101%;
+		}
+	}
+}

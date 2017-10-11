@@ -1,0 +1,7 @@
+{{ $urlPre := "https://api.github.com" }}
+{{ $gist := getJSON $urlPre "/gists/" ( .Get 0 ) }}
+<div class="gist">
+	{{ range $gist.files }}
+		{{ .content | markdownify }}
+	{{ end }}
+</div>

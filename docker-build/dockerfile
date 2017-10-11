@@ -1,0 +1,78 @@
+FROM debian:jessie
+LABEL author="Eric Hiller"
+LABEL contact="erichiller.github.io"
+
+# ARG POWERSHELL_VERSION=6.0.0-beta.8
+# See powershell instructions
+# https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#debian-8
+
+# Install pygments (for syntax highlighting) 
+# Install dependencies and clean up
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \ 
+        python-pygments \
+        git \
+        asciidoc \
+        apt-utils \
+        ca-certificates \
+        curl \
+        apt-transport-https \
+        locales \
+        build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+
+# Setup the locale
+# ENV LANG en_US.UTF-8
+# ENV LC_ALL $LANG
+# RUN locale-gen $LANG && update-locale
+
+
+# Install node
+RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
+RUN apt-get update \
+    && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \ 
+    nodejs
+
+# RUN mkdir /usr/share/blog
+# WORKDIR /usr/share/blog
+
+# # Import the public repository GPG keys
+# RUN curl https://packages.microsoft.com/keys/microsoft.asc | sudo apt-key add -
+
+# # Add microsoft repo
+# RUN echo "deb [arch=amd64] https://packages.microsoft.com/repos/microsoft-debian-jessie-prod jessie main" > /etc/apt/sources.list.d/microsoft.list
+
+# # Install PowerShell
+# RUN sudo apt-get update \
+#     apt-get install -y --no-install-recommends powershell
+
+# Download and install hugo
+# https://github.com/gohugoio/hugo/releases
+ENV HUGO_VERSION 0.29
+ENV HUGO_BINARY hugo_${HUGO_VERSION}_Linux-64bit.deb
+
+
+ADD https://github.com/spf13/hugo/releases/download/v${HUGO_VERSION}/${HUGO_BINARY} /tmp/hugo.deb
+RUN dpkg -i /tmp/hugo.deb \
+	&& rm /tmp/hugo.deb
+
+# Create working directory
+
+# Expose default hugo port
+EXPOSE 1313
+
+
+# Automatically build site
+# ONBUILD RUN npm install && npm update
+# # ONBUILD RUN hugo -d /usr/share/nginx/html/
+# ONBUILD RUN node-sass \_scss\main.scss \src\static\css\main.css
+# ONBUILD RUN grunt --gruntfile indexer\Gruntfile.js lunr-index
+# ONBUILD RUN hugo.exe \
+#     --verbose \
+#     --source=./ \
+#     --destination=/usr/share/nginx/html/
+
+# By default, serve site
+ENV HUGO_BASE_URL http://localhost:1313
+CMD hugo server -b ${HUGO_BASE_URL} --bind=0.0.0.0

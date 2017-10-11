@@ -1,0 +1,187 @@
+.posts {
+	overflow: hidden;
+	
+	li {
+		//display: inline-block;
+		//EH MOD -->
+		//display: inline;
+		width: 100%;
+		max-width: 740px;
+		
+		background: white;
+		z-index: 1;
+		list-style: none;
+		text-align: center;
+		padding: $spacing-s;
+		margin: 0 auto;
+		//<--
+		
+		border-bottom: 1px solid $border-bright;
+		/** EH MOD
+		border-bottom: 1px solid darken($main-color, 6%);
+		**/
+		&:first-child {
+			//EH MOD border-top: 1px solid darken($main-color, 6%);
+				padding-top: $spacing-xs;
+		}
+	
+		.p-wrap {
+			margin: 0 auto;
+			background-color: white;
+			line-height: $spacing-sm;
+			
+			p {
+				margin: .7em;
+			}
+			
+		
+			span[itemprop~=headline] {
+				//display: block;
+				text-align: center;
+				@extend %transition-fast;
+				
+				/** reenable if this works -- kill all these effects for mobile
+				@media (max-width: 942px) {
+					content: none;
+					margin: 0;
+				}
+				**/
+				&::after {
+					content:'\2190';
+					position: relative;
+					opacity: 0;
+					left: $spacing-s;
+					@extend %transition-medium;
+					text-decoration: none;
+					top: -2px;
+				}
+				&::before {
+					content:'\2192';
+					position: relative;
+					opacity: 0;
+					top: -2px;
+					right: $spacing-s;
+					text-decoration: none;
+					@extend %transition-medium;
+				}
+				&:hover {
+					color: $main-color;
+					/** EH MOD
+					background: lighten($main-color, 3%);
+					-webkit-transform: translateX($spacing-s);
+					-ms-transform: translateX($spacing-s);
+					transform: translateX($spacing-s);
+					**/
+					&::before {
+						opacity: 1;
+						right: 10px;
+					}
+					&::after {
+						opacity: 1;
+						left: 10px;
+					}
+				}
+		
+			}
+		
+		} // end .p-wrap
+
+		time {
+			color: darken($main-color, 20%);
+			display: inline-block;
+			padding-right: $spacing-s;
+			width: 155px;
+			font-size: 70%;
+			@media (max-width: 942px) {
+			display: block;
+			width: auto;
+			}
+		}
+		
+		a {
+			//EH MOD color: white;
+			color: $text-color;
+			text-decoration: none;
+		}
+	
+	} // end li
+} // end .posts
+
+.pagination {
+  overflow: hidden;
+  margin-top: 40px;
+  color: lighten($text-color, 60%);
+  text-align: center;
+  border: 1px solid $border-color;
+
+  a, span {
+    box-sizing: border-box;
+    float: left;
+    width: 50%;
+    padding: 20px;
+    text-decoration: none;
+
+    &:first-child {
+      text-decoration: none;
+      border-right: 1px solid $border-color;
+    }
+  }
+
+  a:hover {
+      text-decoration: none;
+      background-color: darken($smoke-color, 5%);
+  }
+} // end .pagination
+
+.taglist {
+	color: #ccc;
+	span {
+		&:first-child {
+			&::before {
+				content: '';
+			}
+		}
+		&::before {
+			content: '\00a0\00b7\00a0';
+		}
+	}
+	a:not(.article-title) {
+		color: $text-color;
+		text-decoration: none;
+		font-size:0.5em;
+	}
+}
+span.read-more {
+	font-size: .72em;
+}
+.taglist a, span.read-more {
+	background-color:lighten($text-light, 59%);
+	display: inline-block;   
+	line-height: $spacing-s;
+	padding:0.3em 0.6em 0.3em 0.6em;
+	vertical-align:20%;  
+	font-family: "Open Sans", sans-serif;
+	font-weight: 700 !important;
+	text-transform:uppercase;
+	letter-spacing:0.05em;
+	border-radius:0.5em;
+	border: .2em solid $border-color;
+	-moz-border-radius: 0.5em;
+	-webkit-border-radius: 0.5em;
+	
+	@extend %transition-fast;
+	&:hover {
+		color: $main-color;
+	}
+}
+.summary {
+	@extend %transition-fast;
+	font-size:.67em;
+	font-weight: lighter;
+	line-height: 50%;
+	
+
+	&:hover {
+		color: $main-color;
+	}
+}
