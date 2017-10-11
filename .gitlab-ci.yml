@@ -9,7 +9,7 @@ before_script:
 pages:
   stage: deploy
   script:
-  - hugo --verbose --source=src --destination=public
+  - hugo --verbose --source=./src --destination=../public
   artifacts:
     paths:
     - public
@@ -19,7 +19,7 @@ pages:
 test:
   stage: test
   script:
-  - hugo --verbose --source=src --destination=public
+  - hugo --verbose --source=./src --destination=../public
   except:
   - master
 

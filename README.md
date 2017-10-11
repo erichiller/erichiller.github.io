@@ -14,7 +14,8 @@ local scss -> css build
 * hugo (can be installed either in the `/` directory of the site, or in the `%PATH%`)
 * node
    * grunt
-   * node-sass (global)
+   * grunt-cli
+   * node-sass (global is ideal)
    * toml
    * string
 
