@@ -1,48 +1,48 @@
 {{ partial "head" . }}
 <body>
-    
-    {{ partial "off-canvas" . }}
+	
+	{{ partial "off-canvas" . }}
 
-    <div class="site-wrapper">
-        {{ partial "header" . }}
-        
-        <section class="single-wrap">
-            <article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+	<div class="site-wrapper">
+		{{ partial "header" . }}
+		
+		<section class="single-wrap">
+			<article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
 				<h5 class="page-date">
-                    <time datetime={{ .Date.Format "2006-01-02" }} itemprop="datePublished">
-                    {{ .Date.Format "2. January 2006" }}
-                    </time>
+					<time datetime={{ .Date.Format "2006-01-02" }} itemprop="datePublished">
+					{{ .Date.Format "2. January 2006" }}
+					</time>
 				</h5>
-                <h1 class="page-title" itemprop="name headline">{{ .Title }}</h1>
-                <div itemprop="articleBody">
-				<div class="center">{{ partial "taglist" . }}</div>
-                    {{ .Content }}
-                </div>
+				<h1 class="page-title" itemprop="name headline">{{ .Title }}</h1>
+				<div itemprop="articleBody">
+					<div class="center">{{ partial "taglist" . }}</div>
+					{{ .Content }}
+				</div>
 
 				{{ partial "float-social" . }}
 				{{ partial "share-bar" . }}
-                
-                {{ if isset .Site.Params "disqusshortname" }}
-                    {{ partial "disqus" . }}
-                {{ end }}
+				
+				{{ if isset .Site.Params "disqusshortname" }}
+					{{ partial "disqus" . }}
+				{{ end }}
 
-                {{ if .NextInSection }}
-                    <a rel="next" href="{{ .NextInSection.Permalink }}" id="next">
-                        <span class="nav-title nav-title-next">{{ with .Site.Params.newer }}{{ . }}{{ end }}</span> &rarr;
-                    </a>
-                {{ end }}
-                {{ if .PrevInSection }}
-                    <a rel="prev" href="{{ .PrevInSection.Permalink }}" id="prev">
-                        &larr; <span class="nav-title nav-title-prev">{{ with .Site.Params.older }}{{ . }}{{ end }}</span>
-                    </a>
-                {{ end }}
-            </article>
-        </section>
+				{{ if .NextInSection }}
+					<a rel="next" href="{{ .NextInSection.Permalink }}" id="next">
+					<span class="nav-title nav-title-next">{{ with .Site.Params.newer }}{{ . }}{{ end }}</span> &rarr;
+					</a>
+				{{ end }}
+				{{ if .PrevInSection }}
+					<a rel="prev" href="{{ .PrevInSection.Permalink }}" id="prev">
+						&larr; <span class="nav-title nav-title-prev">{{ with .Site.Params.older }}{{ . }}{{ end }}</span>
+					</a>
+				{{ end }}
+			</article>
+		</section>
 
-        {{ partial "footer" . }}
-    </div>
-    
-    {{ partial "js" . }}
+		{{ partial "footer" . }}
+	</div>
+	
+	{{ partial "js" . }}
 </body>
 </html>
 
