@@ -4,7 +4,7 @@
 		"name": "Eric D Hiller"
 	},
 	"scripts": {
-		"build-sass": "node-sass ./_scss/main.scss --output ./public/css/main.css",
+		"build-sass": "node-sass ./_scss/main.scss > ./public/css/main.css",
 		"build-grunt": "grunt lunr-index"
 	},
 	"license": "MIT",
