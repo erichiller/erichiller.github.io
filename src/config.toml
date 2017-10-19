@@ -1,5 +1,5 @@
 # see https://gohugo.io/overview/configuration/ for more information
-baseurl = "http://hiller.pro/"
+baseurl = "https://hiller.pro/"
 languageCode = "en-us"
 title = "Hiller.pro"
 canonifyurls = true
@@ -24,11 +24,12 @@ pluralizelisttitles = false
 	blog = "/:year/:month/:day/:slug"
 
 [params]
+	enforceSSL = true
 	name = "Eric Hiller"
 	description = "Knowledge Base and Blog for Eric Hiller"
 	copyright = "Eric Hiller"
 	gituser = "erichiller"
-	linkedin = "http://www.linkedin.com/in/ericdhiller"
+	linkedin = "https://www.linkedin.com/in/ericdhiller"
 
 	# Enable comments by entering your Disqus shortname
 	disqusshortname = "erichiller"

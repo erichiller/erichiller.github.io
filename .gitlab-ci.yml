@@ -19,7 +19,10 @@ pages:
 test:
   stage: test
   script:
-  - hugo --verbose --source=./src --destination=../public
+  - hugo --verbose --source=./src --destination=../test
+  artifacts:
+    paths:
+    - test
   except:
   - master
 

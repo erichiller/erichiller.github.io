@@ -5,7 +5,7 @@ tags=[
 	"windows",
 	"ssh"]
 +++
-Back in June of this year [Microsoft announced](http://blogs.msdn.com/b/powershell/archive/2015/06/03/looking-forward-microsoft-support-for-secure-shell-ssh.aspx) that they were working on a project to get `sshd` working proper on windows. Many, including myself didn't believe it at the time, but then it [surfaced again in October](http://blogs.msdn.com/b/powershell/archive/2015/10/19/openssh-for-windows-update.aspx), this time for real, and I paid attention. I took the time this evening to give it a go, and it does work, and you too can get it up and running in no time flat. Here's a quick how to:
+Back in June of this year [Microsoft announced](https://blogs.msdn.com/b/powershell/archive/2015/06/03/looking-forward-microsoft-support-for-secure-shell-ssh.aspx) that they were working on a project to get `sshd` working proper on windows. Many, including myself didn't believe it at the time, but then it [surfaced again in October](https://blogs.msdn.com/b/powershell/archive/2015/10/19/openssh-for-windows-update.aspx), this time for real, and I paid attention. I took the time this evening to give it a go, and it does work, and you too can get it up and running in no time flat. Here's a quick how to:
 
 # Server Side
 
