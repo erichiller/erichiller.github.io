@@ -15,7 +15,14 @@
 	
 	<!-- my js -->
 	<script src="{{ .Site.BaseURL }}js/main.js"></script>
-	
+
+	<!-- Redirect to https if configured to do so -->
+	{{ if .Site.Params.EnforceSSL }}
+  <script type="text/javascript">
+  if (window.location.protocol != "https:")
+      window.location.protocol = "https";
+  </script>
+	{{ end }}
 	
 	<!-- https://developers.facebook.com/docs/sharing/webmasters -->
 	<meta property="og:title" content="{{ .Title }}"/>
