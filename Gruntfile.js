@@ -43,16 +43,10 @@ module.exports = function(grunt) {
 			if (frontMatter.url) {
 				return frontMatter.url;
 			}
-			grunt.log.writeln("now(iso): " + new Date(Date.now()).toISOString())
-			grunt.log.writeln("now(string): " + new Date(Date.now()).toString())
-			grunt.log.writeln("frontMatter.date(iso) --> " + frontMatter.date.toISOString())
-			grunt.log.writeln("frontMatter.date(string) --> " + frontMatter.date.toISOString())
-			grunt.log.writeln("frontMatter.y/m/d h:m:s --> " + frontMatter.date.getFullYear() + "/" + (frontMatter.date.getMonth()+1) + "/" + frontMatter.date.getDate() + " " + frontMatter.date.getHours() + ":" + frontMatter.date.getMinutes() + ":" + frontMatter.date.getSeconds())
-			grunt.log.writeln("frontMatter.y/m/d h:m:s (utc) --> " + frontMatter.date.getUTCFullYear() + "/" + (frontMatter.date.getUTCMonth()+1) + "/" + frontMatter.date.getUTCDate() + " " + frontMatter.date.getUTCHours() + ":" + frontMatter.date.getUTCMinutes() + ":" + frontMatter.date.getUTCSeconds())
 			if ( frontMatter.date instanceof Date ){
 				href = "/" + frontMatter.date.getFullYear() + "/"
-				href += (frontMatter.date.getMonth()+1) + "/"
-				href += frontMatter.date.getDate() + "/"
+				href += (frontMatter.date.getMonth()+1).toString().padStart(2, "0") + "/"
+				href += frontMatter.date.getDate().toString().padStart(2, "0") + "/"
 			} else {
 				// handle times when the date is not a parseable toml Date
 				date = frontMatter.date.split("T")[0].split("-")

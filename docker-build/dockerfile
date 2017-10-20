@@ -2,6 +2,10 @@ FROM debian:jessie
 LABEL author="Eric Hiller"
 LABEL contact="erichiller.github.io"
 
+# build with:
+# -->  docker build .\docker-build\ -t ehiller/hillerpro-build
+# --> docker push ehiller/hillerpro-build
+
 # ARG POWERSHELL_VERSION=6.0.0-beta.8
 # See powershell instructions
 # https://github.com/PowerShell/PowerShell/blob/master/docs/installation/linux.md#debian-8
@@ -23,9 +27,10 @@ RUN apt-get update \
 
 
 # Setup the locale
-# ENV LANG en_US.UTF-8
-# ENV LC_ALL $LANG
-# RUN locale-gen $LANG && update-locale
+ENV LANG en_US.UTF-8
+ENV LC_ALL $LANG
+RUN locale-gen $LANG && update-locale
+RUN echo "US/Pacific" > /etc/timezone & dpkg-reconfigure -f noninteractive tzdata
 
 
 # Install node
@@ -33,6 +38,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \ 
     nodejs
+RUN npm install -g node-sass grunt grunt-cli
 
 # RUN mkdir /usr/share/blog
 # WORKDIR /usr/share/blog
