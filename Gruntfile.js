@@ -45,7 +45,7 @@ module.exports = function(grunt) {
 			}
 			// have to create from date and title or slug
 			href = "/" + frontMatter.date.getFullYear() + "/"
-			href += ( frontMatter.date.getMonth() + 1 ).toString().padStart(2, "0") + "/"
+			href += frontMatter.date.getMonth().toString().padStart(2, "0") + "/"
 			href += frontMatter.date.getDate().toString().padStart(2, "0") + "/"
 			if (frontMatter.slug) {
 				href += frontMatter.slug
