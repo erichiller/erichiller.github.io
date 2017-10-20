@@ -2,7 +2,9 @@ image: ehiller/hillerpro-build
 
 before_script:
   - apt install tzdata
-  - timedatectl set-timezone America/Los_Angeles
+  # - timedatectl set-timezone America/Los_Angeles
+  - timedatectl list-timezones --no-pager
+  - timedatectl status
   - npm install
   - npm update
   - npm run build-sass
