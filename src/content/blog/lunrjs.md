@@ -1,6 +1,6 @@
 +++
 title="Setting up Search on a Static Website"
-date=2015-11-15T00:00:00-08:00
+date=2015-11-15T12:00:00-08:00
 tags=[
 	"hugo",
 	"web",
