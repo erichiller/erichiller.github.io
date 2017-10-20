@@ -1,6 +1,6 @@
 +++
 title="Installing OpenSSH Server on Windows"
-date="2015-12-06"
+date=2015-12-06T00:00:00-08:00
 tags=[
 	"windows",
 	"ssh"]

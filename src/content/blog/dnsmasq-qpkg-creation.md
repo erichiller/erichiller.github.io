@@ -1,11 +1,7 @@
 +++
-title="Creating dnsmasq QPKG"
-date="2015-11-16"
-tags=[
-	"dnsmasq",
-	"qpkg",
-	"qnap",
-	"dns"]
+title = "Creating dnsmasq QPKG"
+date = 2015-11-16T00:00:00-08:00
+tags = [ "dnsmasq", "qpkg", "qnap", "dns"]
 +++
 
 In this article I am going to describe the steps I took to create the [dnsmasq](https://www.thekelleys.org.uk/dnsmasq/doc.html) [qpkg](https://www.qnap.com/i/useng/), which is an ongoing project I have, and is [listed on github as dnsmasq-qpkg](https://github.com/erichiller/dnsmasq-qpkg). I started this project back at the end of August 2015, because I wanted a [DNS server](https://en.wikipedia.org/wiki/Name_server) for my home that would allow me to:
