@@ -43,10 +43,17 @@ module.exports = function(grunt) {
 			if (frontMatter.url) {
 				return frontMatter.url;
 			}
+			grunt.log.writeln("now(iso): " + new Date(Date.now()).toISOString())
+			grunt.log.writeln("now(string): " + new Date(Date.now()).toString())
+			grunt.log.writeln("frontMatter.date(iso) --> " + frontMatter.date.toISOString())
+			grunt.log.writeln("frontMatter.date(string) --> " + frontMatter.date.toISOString())
+			grunt.log.writeln("frontMatter.y/m/d h:m:s --> " + frontMatter.date.getFullYear() + "/" + (frontMatter.date.getMonth()+1) + "/" + frontMatter.date.getDate() + " " + frontMatter.date.getHours() + ":" + frontMatter.date.getMinutes() + ":" + frontMatter.date.getSeconds())
+			grunt.log.writeln("frontMatter.y/m/d h:m:s (utc) --> " + frontMatter.date.getUTCFullYear() + "/" + (frontMatter.date.getUTCMonth()+1) + "/" + frontMatter.date.getUTCDate() + " " + frontMatter.date.getUTCHours() + ":" + frontMatter.date.getUTCMinutes() + ":" + frontMatter.date.getUTCSeconds())
+			date = frontMatter.date.toISOString().split("T")[0].split("-")
 			// have to create from date and title or slug
-			href = "/" + frontMatter.date.getFullYear() + "/"
-			href += ( frontMatter.date.getMonth() + 1 ).toString().padStart(2, "0") + "/"
-			href += frontMatter.date.getDate().toString().padStart(2, "0") + "/"
+			href = "/" + date[0] + "/"
+			href += date[1] + "/"
+			href += date[2] + "/"
 			if (frontMatter.slug) {
 				href += frontMatter.slug
 			} else {
@@ -83,7 +90,7 @@ module.exports = function(grunt) {
 
 		var processMDFile = function(abspath, filename) {
 			var content = grunt.file.read(abspath);
-			grunt.log.ok("READING FILE:" + abspath)
+			grunt.log.writeln("READING FILE:" + abspath)
 			var pageIndex;
 			// First separate the Front Matter from the content and parse it
 			content = content.split("+++");
