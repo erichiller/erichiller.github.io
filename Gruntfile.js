@@ -49,11 +49,18 @@ module.exports = function(grunt) {
 			grunt.log.writeln("frontMatter.date(string) --> " + frontMatter.date.toISOString())
 			grunt.log.writeln("frontMatter.y/m/d h:m:s --> " + frontMatter.date.getFullYear() + "/" + (frontMatter.date.getMonth()+1) + "/" + frontMatter.date.getDate() + " " + frontMatter.date.getHours() + ":" + frontMatter.date.getMinutes() + ":" + frontMatter.date.getSeconds())
 			grunt.log.writeln("frontMatter.y/m/d h:m:s (utc) --> " + frontMatter.date.getUTCFullYear() + "/" + (frontMatter.date.getUTCMonth()+1) + "/" + frontMatter.date.getUTCDate() + " " + frontMatter.date.getUTCHours() + ":" + frontMatter.date.getUTCMinutes() + ":" + frontMatter.date.getUTCSeconds())
-			date = frontMatter.date.toISOString().split("T")[0].split("-")
-			// have to create from date and title or slug
-			href = "/" + date[0] + "/"
-			href += date[1] + "/"
-			href += date[2] + "/"
+			if ( frontMatter.date instanceof Date ){
+				href = "/" + frontMatter.date.getFullYear() + "/"
+				href += (frontMatter.date.getMonth()+1) + "/"
+				href += frontMatter.date.getDate() + "/"
+			} else {
+				// handle times when the date is not a parseable toml Date
+				date = frontMatter.date.split("T")[0].split("-")
+				// have to create from date and title or slug
+				href = "/" + date[0] + "/"
+				href += date[1] + "/"
+				href += date[2] + "/"
+			}
 			if (frontMatter.slug) {
 				href += frontMatter.slug
 			} else {
