@@ -200,6 +200,12 @@
 		content: "\f0e1";
 	}
 }
+.stackOverflow-share {
+	&::before {
+		@extend .before-icon;
+		content: "\f16c";
+	}
+}
 .twitter-share {
 	&::before {
 		@extend .before-icon;

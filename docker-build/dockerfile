@@ -26,10 +26,14 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 
-# Setup the locale
-ENV LANG en_US.UTF-8
-ENV LC_ALL $LANG
-RUN locale-gen $LANG && update-locale
+# RUN locale -a
+# # Setup the locale
+# # ADD this is for diagnositcs only!!!!!!!!!!!!!!!!!!!!!!!!!!
+# RUN whoami
+# ENV LANG "en_US.UTF-8"
+# ENV LC_ALL $LANG
+# RUN locale-gen "$LANG" && update-locale && dpkg-reconfigure -f noninteractive locales
+
 RUN echo "US/Pacific" > /etc/timezone & dpkg-reconfigure -f noninteractive tzdata
 
 
@@ -38,7 +42,7 @@ RUN curl -sL https://deb.nodesource.com/setup_8.x | bash -
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \ 
     nodejs
-RUN npm install -g node-sass grunt grunt-cli
+# RUN npm install -g node-sass grunt grunt-cli
 
 # RUN mkdir /usr/share/blog
 # WORKDIR /usr/share/blog

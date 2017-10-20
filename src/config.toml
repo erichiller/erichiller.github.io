@@ -30,6 +30,7 @@ pluralizelisttitles = false
 	copyright = "Eric Hiller"
 	gituser = "erichiller"
 	linkedin = "https://www.linkedin.com/in/ericdhiller"
+	stackOverflow = "https://stackoverflow.com/story/ehiller"
 
 	# Enable comments by entering your Disqus shortname
 	disqusshortname = "erichiller"
