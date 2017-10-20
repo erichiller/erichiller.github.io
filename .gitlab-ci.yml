@@ -1,6 +1,7 @@
 image: ehiller/hillerpro-build
 
 before_script:
+  - timedatectl set-timezone America/Los_Angeles
   - npm install
   - npm update
   - npm run build-sass
