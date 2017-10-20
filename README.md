@@ -21,7 +21,13 @@ local scss -> css build
 
 # Installation
 
-`git clone https://github.com/erichiller/erichiller.github.io -b source`
+`git clone https://gitlab.com/erichiller/erichiller.gitlab.io`
 
-1. Go into `/indexer` and run `npm install` - this will install `grunt` and dependencies
-2. in `/` execute `Manage-Site.ps1`
+1. From the repo directory run `npm install` - this will install `grunt` and dependencies
+2. `hugo new` in order to create new articles will open Visual Studio code which is the currently configured editor
+3. Once finished, simply `git commit` , `git add` and `git push`
+
+
+# To Do
+
+- revive `Manage-Site.ps1` for testing and other utilitarian purposes
