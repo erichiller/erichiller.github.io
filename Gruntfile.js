@@ -48,7 +48,6 @@ module.exports = function(grunt) {
 			href += ( frontMatter.date.getMonth() + 1 ).toString().padStart(2, "0") + "/"
 			href += frontMatter.date.getDate().toString().padStart(2, "0") + "/"
 			if (frontMatter.slug) {
-				grunt.log.ok("found slug")
 				href += frontMatter.slug
 			} else {
 				href += frontMatter.title
