@@ -2,7 +2,7 @@ image: ehiller/hillerpro-build
 
 before_script:
   - date
-  - ln -s /usr/share/zoneinfo/US/Pacific /etc/localtime
+  - echo "US/Pacific" > /etc/timezone & dpkg-reconfigure -f noninteractive tzdata
   - date
   - npm install
   - npm update
