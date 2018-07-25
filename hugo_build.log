@@ -1,0 +1,14 @@
+WARN: 2018/07/25 10:36:47 hugo.go:489: No theme set
+WARN: 2018/07/25 10:36:47 template_i18n.go:61: No translation bundle found for default language "en"
+WARN: 2018/07/25 10:36:47 template_i18n.go:44: Translation func for language en not found, use default.
+WARN: 2018/07/25 10:36:47 template_i18n.go:44: Translation func for language en not found, use default.
+WARN: 2018/07/25 10:36:52 template_i18n.go:44: Translation func for language en not found, use default.
+LOG:   2018/07/25 10:36:53 site.go:2181: Built site for language en:
+LOG:   2018/07/25 10:36:53 site.go:2182: 0 draft content
+LOG:   2018/07/25 10:36:53 site.go:2183: 0 future content
+LOG:   2018/07/25 10:36:53 site.go:2184: 0 expired content
+LOG:   2018/07/25 10:36:53 site.go:2185: 8 pages created
+LOG:   2018/07/25 10:36:53 site.go:2186: 0 non-page files copied
+LOG:   2018/07/25 10:36:53 site.go:2187: 18 paginator pages created
+LOG:   2018/07/25 10:36:53 site.go:2191: 16 tags created
+LOG:   2018/07/25 10:36:53 hugo_sites.go:247: total in 5624 ms
