@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+
+
+
+ <html class="no-js"> 
+<head>
+    <title>Setting up Search on a Static Website &middot; Hiller.pro</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="content-language" content="en-us" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <meta name="author" content="Eric Hiller">
+    <meta name="description" content="Knowledge Base and Blog for Eric Hiller">
+	<link rel="icon" type="image/png" href="https://www.hiller.pro/img/favicon.ico">
+	
+	
+	<script src="https://www.hiller.pro/js/main.js"></script>
+
+	
+	
+	
+	
+	<meta property="og:title" content="Setting up Search on a Static Website"/>
+	<meta property="og:type" content="website"/>
+	<meta property="og:site_name" content="Hiller.pro"/>
+	<meta property="og:description" content="Knowledge Base and Blog for Eric Hiller">
+
+    <!-- Stylesheets -->
+    <link rel="stylesheet" type="text/css" href="https://www.hiller.pro/css/main.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/styles/tomorrow.min.css">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:400italic,400,300,700|Lora:400,700,400italic" rel="stylesheet" type="text/css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+</head>
+<body>
+	
+	<div class="off-canvas">
+    <figure class="avatar">
+        <a href="https://www.hiller.pro/"><img src="https://www.hiller.pro/img/avatar.jpg" title="Eric Hiller"></a>
+    </figure>
+    <div class="bio">
+        
+            <h1>Welcome, I&#39;m Eric Hiller</h1>
+        
+        
+            <p>Topical news and Information collected across the years from the network, telecom, software, and general science and technology fields.</p>
+        
+    </div>
+	
+	<nav>
+		<h6>Main</h6>
+		
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/">Home</a><br />
+			
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/about">About</a><br />
+			
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/search">Search</a><br />
+			
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/blog">Blog</a><br />
+			
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/kb">Knowledge Base</a><br />
+			
+		
+			
+				<a class="sidebar-nav-item" href="https://www.hiller.pro/code">Code</a><br />
+			
+		
+	</nav>
+	
+	<div class="rss">
+		<h6>Subscribe to Updates</h6>
+		<a class="rss" href="https://www.hiller.pro/index.xml">RSS News Feed</a>
+	</div>
+	<div id="find-me-on">
+		<h6>Find Me On</h6>
+		<a href="https://github.com/erichiller" class="github">GitHub</a>
+		<a href="https://www.linkedin.com/in/ericdhiller" class="linkedin-share">LinkedIn</a>
+		<a href="https://stackoverflow.com/story/ehiller" class="stackOverflow-share">Stack Overflow</a>
+	</div>
+	
+</div>
+
+	<div class="site-wrapper">
+		<a class="menu-icon" title="Menu"><span class="lines"></span></a>
+<header>
+	<div class="h-wrap">
+		
+		<h1 class="title"><a href="https://www.hiller.pro/">Hiller.pro</a></h1>
+		
+	</div>
+	<div class="readProgressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">&nbsp;</div>
+
+	
+	<h5 id="header-tagline">Knowledge Base and Blog for Eric Hiller</h5>
+	
+
+	<div class="readProgressBar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">&nbsp;</div>
+</header>
+<div id="h-space"></div>
+		
+		<section class="single-wrap">
+			<article class="single-content" itemscope itemtype="//schema.org/BlogPosting">
+				<h5 class="page-date">
+					<time datetime=2015-11-15 itemprop="datePublished">
+					15. November 2015
+					</time>
+				</h5>
+				<h1 class="page-title" itemprop="name headline">Setting up Search on a Static Website</h1>
+				<div itemprop="articleBody">
+					<div class="center">
+<div class="taglist">
+
+	<span></span><a href="https://www.hiller.pro/tags/hugo/">hugo</a><span></span><a href="https://www.hiller.pro/tags/web/">web</a><span></span><a href="https://www.hiller.pro/tags/javascript/">javascript</a><span></span><a href="https://www.hiller.pro/tags/search/">search</a><span></span><a href="https://www.hiller.pro/tags/lunr.js/">lunr.js</a>
+
+</div></div>
+					<p>Creating a static website has a number of advantages, not least of which is speed. However there can certainly be some difficulties in creating ease-of-use features for visitors. One such feature that I wanted for this site, was a on-site search feature, as my intention is gradually convert my local documentation and upload it. In order for me to implement this I had to find a client-side solution as the server was to be entirely static, enter <a href="https://lunrjs.com/">lunr.js</a>. lunr.js is written in javascript, and has an indexer that runs on node on your local machine, goes over your site files generating a json index file, then has a search library that you call from your web frontend (and thus in the client&rsquo;s browser) which reads and searches that index file. This allows for your site to stay static, and still have the dynamic feature of search. Thanks to these clever folks, search implementation became a snap for my static, hugo powered website.</p>
+
+<p>Here I have put together a gist on how to get up and running:</p>
+
+
+
+<div class="gist">
+	
+		<h1 id="gist-description">Gist Description</h1>
+
+<blockquote>
+<p>How to implement a custom search for <a href="http://gohugo.io">Hugo</a> usig <a href="http://gruntjs.com">Gruntjs</a> and <a href="http://lunrjs.com">Lunrjs</a>.<br />
+Updated from original to allow for url page changes, more detailed install instructions.<br />
+See More at <a href="www.hiller.pro">www.hiller.pro</a><br />
+Thanks to <a href="https://gist.github.com/sebz/efddfc8fdcb6b480f567">sebz</a> for the initial writeup!</p>
+</blockquote>
+
+<h2 id="requirements">Requirements</h2>
+
+<p>Requires <a href="https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager">Nodejs</a></p>
+
+<h2 id="setup">Setup</h2>
+
+<h3 id="project-organization">Project organization</h3>
+
+<p>Here is my Hugo based website project structure</p>
+
+<pre><code>	MySite/
+		|- src/ &lt;= Hugo source (private) root folder
+			|- content &lt;= .md content folders &amp; files
+			|- layout/
+				|- static
+				|- js/
+					|- pindex.json &lt;= Where we generate the lunr json index file
+					|- lunrjs.min.js &lt;= lunrjs library
+					|- ...
+			|- ...
+			|- config.toml
+		|- indexer/ &lt;= lunr and associated node files
+			|- node_modules/ &lt;- node dependencies
+			|- Gruntfile.js &lt;= Where the magic happens (see below)
+			|- package.json &lt;= Dependencies declaration required to build the index
+		|- ...
+</code></pre>
+
+<h3 id="install-the-nodejs-dependencies">Install the Nodejs dependencies</h3>
+
+<ul>
+<li><a href="https://github.com/BinaryMuse/toml-node">toml</a></li>
+<li><a href="http://gruntjs.com/getting-started">grunt</a></li>
+<li><a href="http://stringjs.com/">string</a>
+
+<ul>
+<li>Used to parse the Frontmatter, mine is in TOML</li>
+<li>Otherwise you can install <a href="https://www.npmjs.com/package/yamljs">yamljs</a></li>
+</ul></li>
+</ul>
+
+<ol>
+<li><p>Navigate to the folder you wish to install the indexer into (in the above example <code>MySite/indexer</code>; and issue the commands:</p>
+
+<p><code>touch package.json</code><br />
+<code>npm --global install grunt-cli</code><br />
+<code>npm install --save-dev grunt string toml</code></p></li>
+
+<li><p>create the Gruntfile.js (see below)</p></li>
+</ol>
+
+<p><em>Note I modified the Gruntfile.js to allow for changed urls</em></p>
+
+<h2 id="time-to-work">Time to work</h2>
+
+<h3 id="the-principle">The principle</h3>
+
+<p>We will work both at buildtime and runtime. With Gruntjs (buildtime), we&rsquo;ll generate a JSON index file and with a small js script (runtime) initilize and use lunrjs.</p>
+
+<h3 id="build-the-lunr-index-file">Build the Lunr index file</h3>
+
+<p>Lunrjs allows you to define fields to describe your pages (documents in lunrjs terms) that will be used to search and hopefully find stuff. The index file is basically a JSON file corresponding to an array of all the documents (pages) composing the website.</p>
+
+<p>Here are the fields I chose to describe my pages:</p>
+
+<ul>
+<li><code>title</code> =&gt; Frontmatter title or file name</li>
+<li><code>tags</code> =&gt; Frontmatter tags or nothing</li>
+<li><code>content</code> =&gt; File content</li>
+<li><code>ref</code> =&gt; Reworked file path used as absolute URL</li>
+</ul>
+
+<p><code>ref</code> can be drawn either from the directory position within <code>content</code> or from the <code>url</code> field within the frontmatter</p>
+
+<h4 id="workflow">Workflow</h4>
+
+<ol>
+<li>Recursively walk through all files of the <code>content</code> folder</li>
+<li>Two possibilities
+
+<ol>
+<li>Markdown file
+
+<ol>
+<li>Parse the Frontmatter to extract the <code>title</code> and the <code>tags</code></li>
+<li>Parse and clean the content</li>
+</ol></li>
+<li>HTML file
+
+<ol>
+<li>Parse and clean the content</li>
+<li>Use the file name as <code>title</code></li>
+</ol></li>
+</ol></li>
+<li>Use the path file as <code>ref</code> (link toward the page)</li>
+</ol>
+
+<h4 id="show-me-the-code">Show me the code!</h4>
+
+<p>Here is the <code>Gruntfile.js</code> file:</p>
+
+<pre><code class="language-js">
+var toml = require(&quot;toml&quot;);
+var S = require(&quot;string&quot;);
+
+var CONTENT_PATH_PREFIX = &quot;../src/content&quot;;
+var SITE_IDX_DEST = &quot;../src/static/js/pindex.json&quot;;
+
+module.exports = function(grunt) {
+
+    grunt.registerTask(&quot;lunr-index&quot;, function() {
+
+        grunt.log.writeln(&quot;Build pages index&quot;);
+
+        var indexPages = function() {
+            var pagesIndex = [];
+            grunt.file.recurse(CONTENT_PATH_PREFIX, function(abspath, rootdir, subdir, filename) {
+                grunt.verbose.writeln(&quot;Parse file:&quot;,abspath);
+                pagesIndex.push(processFile(abspath, filename));
+            });
+
+            return pagesIndex;
+        };
+
+        var processFile = function(abspath, filename) {
+            var pageIndex;
+
+            if (S(filename).endsWith(&quot;.html&quot;)) {
+                pageIndex = processHTMLFile(abspath, filename);
+            } else {
+                pageIndex = processMDFile(abspath, filename);
+            }
+
+            return pageIndex;
+        };
+
+        var processHTMLFile = function(abspath, filename) {
+            var content = grunt.file.read(abspath);
+            var pageName = S(filename).chompRight(&quot;.html&quot;).s;
+            var href = S(abspath)
+                .chompLeft(CONTENT_PATH_PREFIX).s;
+            return {
+                title: pageName,
+                href: href,
+                content: S(content).trim().stripTags().stripPunctuation().s
+            };
+        };
+
+        var processMDFile = function(abspath, filename) {
+            var content = grunt.file.read(abspath);
+			grunt.log.ok(&quot;READING FILE:&quot; + abspath)
+            var pageIndex;
+            // First separate the Front Matter from the content and parse it
+            content = content.split(&quot;+++&quot;);
+            var frontMatter;
+            try {
+                frontMatter = toml.parse(content[1].trim());
+            } catch (e) {
+                grunt.log.error(&quot;ERROR WHILST PROCESSING: &quot; + abspath + e.message);
+            }
+			if (frontMatter.url) {
+				var href = frontMatter.url;
+			} else {
+				var href = S(abspath).chompLeft(CONTENT_PATH_PREFIX).chompRight(&quot;.md&quot;).s;
+				// href for index.md files stops at the folder name
+				if (filename === &quot;index.md&quot;) {
+					href = S(abspath).chompLeft(CONTENT_PATH_PREFIX).chompRight(filename).s;
+				}
+			}
+
+
+            // Build Lunr index for this page
+            pageIndex = {
+                title: frontMatter.title,
+                tags: frontMatter.tags,
+                href: href,
+                content: S(content[2]).trim().stripTags().stripPunctuation().s
+            };
+
+            return pageIndex;
+        };
+
+        grunt.file.write(SITE_IDX_DEST, JSON.stringify(indexPages()));
+        grunt.log.ok(&quot;Index built&quot;);
+    });
+};
+
+</code></pre>
+
+<p>Example index file looks like:</p>
+
+<pre><code class="language-js">[{
+    &quot;title&quot;: &quot;Page1&quot;,
+    &quot;href&quot;: &quot;/section/page1&quot;,
+    &quot;content&quot;: &quot; This is the cleaned content of 'site/content/section/page1.md' &quot;
+}, {
+    &quot;title&quot;: &quot;Page2&quot;,
+    &quot;tags&quot;: [&quot;tag1&quot;, &quot;tag2&quot;, &quot;tag3&quot;],
+    &quot;href&quot;: &quot;/section/page2&quot;,
+    &quot;content&quot;: &quot; This is the cleaned content of 'site/content/section/page2.md' &quot;
+}, {
+    &quot;title&quot;: &quot;Page3&quot;,
+    &quot;href&quot;: &quot;/section/page3&quot;,
+    &quot;content&quot;: &quot; This is the cleaned content of 'site/content/section/page3.md' &quot;
+}]
+</code></pre>
+
+<p>Launch the task: <code>grunt lunr-index</code> or to run from any directory <code>grunt --gruntfile the/remote/directory/indexer/Gruntfile.js lunr-index</code></p>
+
+<h3 id="use-the-index">Use the index</h3>
+
+<p>On the client side here is a small usage example:</p>
+
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+
+&lt;head&gt;
+    &lt;title&gt;Hugo + Lunrjs = &amp;lt;3 search &lt;/title&gt;
+&lt;/head&gt;
+
+&lt;body&gt;
+    Search:
+    &lt;input id=&quot;search&quot; type=&quot;text&quot;&gt;
+    &lt;br&gt; Results:
+    &lt;ul id=&quot;results&quot;&gt;
+    &lt;/ul&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;https://code.jquery.com/jquery-2.1.3.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot; src=&quot;js/vendor/lunr.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script type=&quot;text/javascript&quot;&gt;
+    var lunrIndex,
+        $results,
+        pagesIndex;
+
+    // Initialize lunrjs using our generated index file
+    function initLunr() {
+        // First retrieve the index file
+        $.getJSON(&quot;js/lunr/PagesIndex.json&quot;)
+            .done(function(index) {
+                pagesIndex = index;
+                console.log(&quot;index:&quot;, pagesIndex);
+
+                // Set up lunrjs by declaring the fields we use
+                // Also provide their boost level for the ranking
+                lunrIndex = lunr(function() {
+                    this.field(&quot;title&quot;, {
+                        boost: 10
+                    });
+                    this.field(&quot;tags&quot;, {
+                        boost: 5
+                    });
+                    this.field(&quot;content&quot;);
+
+                    // ref is the result item identifier (I chose the page URL)
+                    this.ref(&quot;href&quot;);
+                });
+
+                // Feed lunr with each file and let lunr actually index them
+                pagesIndex.forEach(function(page) {
+                    lunrIndex.add(page);
+                });
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + &quot;, &quot; + error;
+                console.error(&quot;Error getting Hugo index flie:&quot;, err);
+            });
+    }
+
+    // Nothing crazy here, just hook up a listener on the input field
+    function initUI() {
+        $results = $(&quot;#results&quot;);
+        $(&quot;#search&quot;).keyup(function() {
+            $results.empty();
+
+            // Only trigger a search when 2 chars. at least have been provided
+            var query = $(this).val();
+            if (query.length &lt; 2) {
+                return;
+            }
+
+            var results = search(query);
+
+            renderResults(results);
+        });
+    }
+
+    /**
+     * Trigger a search in lunr and transform the result
+     *
+     * @param  {String} query
+     * @return {Array}  results
+     */
+    function search(query) {
+        // Find the item in our index corresponding to the lunr one to have more info
+        // Lunr result: 
+        //  {ref: &quot;/section/page1&quot;, score: 0.2725657778206127}
+        // Our result:
+        //  {title:&quot;Page1&quot;, href:&quot;/section/page1&quot;, ...}
+        return lunrIndex.search(query).map(function(result) {
+                return pagesIndex.filter(function(page) {
+                    return page.href === result.ref;
+                })[0];
+            });
+    }
+
+    /**
+     * Display the 10 first results
+     *
+     * @param  {Array} results to display
+     */
+    function renderResults(results) {
+        if (!results.length) {
+            return;
+        }
+
+        // Only show the ten first results
+        results.slice(0, 10).forEach(function(result) {
+            var $result = $(&quot;&lt;li&gt;&quot;);
+            $result.append($(&quot;&lt;a&gt;&quot;, {
+                href: result.href,
+                text: &quot;» &quot; + result.title
+            }));
+            $results.append($result);
+        });
+    }
+
+    // Let's get started
+    initLunr();
+
+    $(document).ready(function() {
+        initUI();
+    });
+    &lt;/script&gt;
+&lt;/body&gt;
+
+&lt;/html&gt;
+
+</code></pre>
+
+	
+</div>
+
+				</div>
+
+				<div id="float-social-wrap">
+
+	<div id="float-social">
+		<a href="mailto:?subject=Setting%20up%20Search%20on%20a%20Static%20Website&amp;body=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website" class="email-share popup"> </a>
+		<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website" class="popup facebook-share"> </a>
+		<a href="https://twitter.com/share" class="popup twitter-share"> </a>
+		<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website&amp;title=Setting%20up%20Search%20on%20a%20Static%20Website" class="popup linkedin-share"> </a>
+		<a class="reddit-share popup" href="https://www.reddit.com/submit?url=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website"> </a>
+	</div>
+			
+</div>
+				<div class="share-bar">
+	<a href="mailto:?subject=Setting%20up%20Search%20on%20a%20Static%20Website&amp;body=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website" class="email-share popup">email</a>
+	<a href="https://www.facebook.com/sharer/sharer.php?u=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website" class="popup facebook-share">facebook</a>
+	<a href="https://twitter.com/share" class="popup twitter-share">twitter</a>
+	<a href="https://www.linkedin.com/shareArticle?mini=true&amp;url=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website&amp;title=Setting%20up%20Search%20on%20a%20Static%20Website&amp;summary=Creating%20a%20static%20website%20has%20a%20number%20of%20advantages%2c%20not%20least%20of%20which%20is%20speed.%20However%20there%20can%20certainly%20be%20some%20difficulties%20in%20creating%20ease-of-use%20features%20for%20visitors.%20One%20such%20feature%20that%20I%20wanted%20for%20this%20site%2c%20was%20a%20on-site%20search%20feature%2c%20as%20my%20intention%20is%20gradually%20convert%20my%20local%20documentation%20and%20upload%20it.%20In%20order%20for%20me%20to%20implement%20this%20I%20had%20to%20find%20a%20client-side%20solution%20as%20the%20server%20was%20to%20be%20entirely%20static%2c%20enter%20lunr...." class="popup linkedin-share">linkedIn</a>
+	<a class="reddit-share popup" href="https://www.reddit.com/submit?url=https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website">reddit</a>
+</div>
+				
+				
+					
+<section class="disqus">
+	<div id="disqus_thread"></div>
+	<script type="text/javascript">
+	var disqus_shortname = 'erichiller';
+	var disqus_developer = 0; 
+	(function() {
+		
+		if (window.location.hostname == "localhost")
+			return;
+		
+		var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+		dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+		(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+	})();
+	</script>
+	<noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+	<a href="//disqus.com" class="dsq-brlink">comments powered by <span class="logo-disqus">Disqus</span></a>
+</section>
+				
+
+				
+					<a rel="next" href="https://www.hiller.pro/2015/11/16/creating-dnsmasq-qpkg" id="next">
+					<span class="nav-title nav-title-next">Newer</span> &rarr;
+					</a>
+				
+				
+					<a rel="prev" href="https://www.hiller.pro/2015/11/14/inaugural-post" id="prev">
+						&larr; <span class="nav-title nav-title-prev">Older</span>
+					</a>
+				
+			</article>
+		</section>
+
+		<footer>
+	<small>
+	
+		Eric Hiller
+	
+	 © 2016
+	</small>
+</footer>
+	</div>
+	
+	
+<!-- Google Analytics -->
+<script>
+  var _gaq=[['_setAccount','UA-40202820-3'],['_trackPageview']];
+  (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
+  g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
+  s.parentNode.insertBefore(g,s)}(document,'script'));
+</script>
+
+
+<!-- Syntax highlighting -->
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/8.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+</body>
+</html>
+
+

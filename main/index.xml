@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Main-rss on Hiller.pro</title>
+    <link>https://www.hiller.pro/main/index.xml</link>
+    <description>Recent content in Main-rss on Hiller.pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Eric Hiller</copyright>
+    <atom:link href="https://www.hiller.pro/main/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Background</title>
+      <link>https://www.hiller.pro/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.hiller.pro/about/</guid>
+      <description>&lt;p&gt;
+&lt;figure &gt;
+    
+        &lt;img src=&#34;https://www.hiller.pro/img/bio.jpg&#34; /&gt;
+    
+    
+    &lt;figcaption&gt;
+        &lt;h4&gt;Eric Hiller&lt;/h4&gt;
+        
+    &lt;/figcaption&gt;
+    
+&lt;/figure&gt;
+Hello, at this point hopefully you&amp;rsquo;ve had a bit to look around, maybe read a few docs or something I&amp;rsquo;ve published. Most of the pages on here are the notes and information I&amp;rsquo;ve gathered whilst working on whatever project is at hand. Much of this information is years old, but I still go back and reference it often, so I hope that it is useful for others besides myself.&lt;/p&gt;
+
+&lt;p&gt;A little about me, I have a lifelong interest in science, technology, and especially human spaceflight, which has been a primary driving force in my life for some time: &lt;strong&gt;to open space up to humankind.&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;I have both a business and technical background, having run a startup ISP and CLEC (Telecommunications provider) and grown it over 10 years before its sale in 2013. Over that period of time I was the wearer of a great many hats, which meant the acquisition of many skills, and this always kept my curiosity fed. Core knowledge in business financials, IP networking, telecommunications systems - from pots , ss7 to sigtran, to sip, mgcp, systems administration, data center / infrastructure engineering, outside plant design and construction, wireless communications from tower construction (tower climbing certified) to microwave link design, and software programming, specifically for operations support systems.&lt;/p&gt;
+
+&lt;p&gt;After the sale of my business I spent some time getting to know the world, and traveled and lived in Australia, which I truly love and hope to eventually return to. But work took me back to the United States, and I currently reside in Los Angeles, CA and work as a Infrastructure Engineer on Data Centers.&lt;/p&gt;
+
+&lt;p&gt;I am always looking for new opportunities and knowledge growth and greatly appreciate being involved in projects. If you&amp;rsquo;d like to get in touch, please add me on linked in or github and shoot me a message.&lt;/p&gt;
+
+&lt;p&gt;Thanks!&lt;/p&gt;
+
+&lt;p&gt;-Eric
+&lt;div id=&#34;find-me-on&#34;&gt;
+	&lt;h5&gt;Find Me On&lt;/h5&gt;
+	&lt;a href=&#34;https://github.com/&#34; class=&#34;github&#34;&gt;GitHub&lt;/a&gt; 
+	&lt;a href=&#34;https://www.linkedin.com/in/https://www.linkedin.com/in/ericdhiller&#34; class=&#34;linkedin-share&#34;&gt;LinkedIn&lt;/a&gt;
+&lt;/div&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+    <item>
+      <title>SiteWide Search</title>
+      <link>https://www.hiller.pro/search/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.hiller.pro/search/</guid>
+      <description>&lt;div class=&#34;searchbox&#34;&gt;
+	&lt;h5&gt;Search&lt;/h5&gt;
+	&lt;input id=&#34;search&#34; type=&#34;text&#34; autofocus&gt;
+	&lt;h5&gt;Results&lt;/h5&gt;
+	&lt;ul id=&#34;results&#34;&gt;&lt;/ul&gt;
+&lt;/div&gt;
+
+
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://code.jquery.com/jquery-2.1.3.min.js&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://www.hiller.pro/js/lunr.min.js&#34;&gt;&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34;&gt;
+	var lunrIndex,
+		$results,
+		pagesIndex;
+	
+	
+	function initLunr() {
+		
+		$.getJSON(&#34;/js/pindex.json&#34;)
+			.done(function(index) {
+				pagesIndex = index;
+				console.log(&#34;index:&#34;, pagesIndex);
+	
+				
+				
+				lunrIndex = lunr(function() {
+					this.field(&#34;title&#34;, {
+						boost: 10
+					});
+					this.field(&#34;tags&#34;, {
+						boost: 5
+					});
+					this.field(&#34;content&#34;);
+	
+					
+					this.ref(&#34;href&#34;);
+				});
+	
+				
+				pagesIndex.forEach(function(page) {
+					lunrIndex.add(page);
+				});
+			})
+			.fail(function(jqxhr, textStatus, error) {
+				var err = textStatus + &#34;, &#34; + error;
+				console.error(&#34;Error getting Hugo index flie:&#34;, err);
+			});
+	}
+	
+	
+	function initUI() {
+		$results = $(&#34;#results&#34;);
+		$(&#34;#search&#34;).keyup(function() {
+			$results.empty();
+	
+			
+			var query = $(this).val();
+			if (query.length &lt; 2) {
+				return;
+			}
+	
+			var results = search(query);
+	
+			renderResults(results);
+		});
+	}
+	
+	
+
+	function search(query) {
+		
+		
+		
+		
+		
+		return lunrIndex.search(query).map(function(result) {
+				return pagesIndex.filter(function(page) {
+					return page.href === result.ref;
+				})[0];
+			});
+	}
+	
+	
+
+	function renderResults(results) {
+		if (!results.length) {
+			return;
+		}
+	
+		
+		results.slice(0, 10).forEach(function(result) {
+			var $result = $(&#34;&lt;li&gt;&#34;);
+			$result.append($(&#34;&lt;a&gt;&#34;, {
+				href: &#39;&#39;+result.href,
+				text: result.title,
+				&#34;class&#34;: &#39;titlelink&#39;
+			}));
+			if(result.tags instanceof Array){
+				
+				var $taglist = $(&#34;&lt;div&gt;&#34;, {
+					&#34;class&#34;: &#39;taglist&#39;
+				});
+				result.tags.slice(0).forEach(function(tag) {
+					
+					$taglist.append($(&#34;&lt;span&gt;&#34;));
+					$taglist.append($(&#34;&lt;a&gt;&#34;, {
+						href: &#39;/tags/&#39;+ tag.toLowerCase(),
+						text: tag
+					}));
+				});
+				console.log(&#39;append taglist for &#39; + result.title + &#34;=&#34;)
+				console.log($taglist)
+				$result.append($taglist);
+			}
+			$results.append($result);
+		});
+	}
+	
+	
+	initLunr();
+	
+	$(document).ready(function() {
+		initUI();
+	});
+&lt;/script&gt;
+
+</description>
+    </item>
+    
+    <item>
+      <title>Software &amp; Code</title>
+      <link>https://www.hiller.pro/code/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://www.hiller.pro/code/</guid>
+      <description>&lt;p&gt;Public software repositories for some of the open source projects I&amp;rsquo;ve worked on, hosted on GitHub.&lt;/p&gt;
+
+
+
+&lt;div class=&#34;repolist&#34;&gt;
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/adafruit_guide_fft&#34;&gt;
+				&lt;h5&gt;adafruit_guide_fft&lt;/h5&gt;
+				&lt;p&gt;Code for the &amp;#39;FFT: Fun with Fourier Transforms&amp;#39; guide on http://learn.adafruit.com/.&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/Adafruit_TCS34725&#34;&gt;
+				&lt;h5&gt;Adafruit_TCS34725&lt;/h5&gt;
+				&lt;p&gt;Driver for Adafruit&amp;#39;s TCS34725 RGB Color Sensor Breakout&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/cmder&#34;&gt;
+				&lt;h5&gt;cmder&lt;/h5&gt;
+				&lt;p&gt;cmder directory for backup&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;3&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;3&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/dnsmasq-qpkg&#34;&gt;
+				&lt;h5&gt;dnsmasq-qpkg&lt;/h5&gt;
+				&lt;p&gt;dnsmasq qpkg for qnap nas&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;15&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;15&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/erichiller.github.io&#34;&gt;
+				&lt;h5&gt;erichiller.github.io&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/fan-controller-esp32&#34;&gt;
+				&lt;h5&gt;fan-controller-esp32&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/godoc2md&#34;&gt;
+				&lt;h5&gt;godoc2md&lt;/h5&gt;
+				&lt;p&gt;Simple translation from godoc to markdown.&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/hue-control-panel&#34;&gt;
+				&lt;h5&gt;hue-control-panel&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/hue-switch&#34;&gt;
+				&lt;h5&gt;hue-switch&lt;/h5&gt;
+				&lt;p&gt;simple hue light switch - raspberry pi lamp&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/hues&#34;&gt;
+				&lt;h5&gt;hues&lt;/h5&gt;
+				&lt;p&gt;Hue Entertainment in C&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/kb&#34;&gt;
+				&lt;h5&gt;kb&lt;/h5&gt;
+				&lt;p&gt;Knowledge Base is a OneNote to markdown converter&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/lgr&#34;&gt;
+				&lt;h5&gt;lgr&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/LSTM_tsc&#34;&gt;
+				&lt;h5&gt;LSTM_tsc&lt;/h5&gt;
+				&lt;p&gt;An LSTM for time-series classification&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/mkmrk&#34;&gt;
+				&lt;h5&gt;mkmrk&lt;/h5&gt;
+				&lt;p&gt;Financial Analysis&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/mmgr&#34;&gt;
+				&lt;h5&gt;mmgr&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/netbox-connections-export&#34;&gt;
+				&lt;h5&gt;netbox-connections-export&lt;/h5&gt;
+				&lt;p&gt;Netbox Connections into Google Sheets&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/omega&#34;&gt;
+				&lt;h5&gt;omega&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;1&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;1&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/omega-fonts&#34;&gt;
+				&lt;h5&gt;omega-fonts&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/plottable&#34;&gt;
+				&lt;h5&gt;plottable&lt;/h5&gt;
+				&lt;p&gt;A library of modular chart components, built on D3&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/PSSudo&#34;&gt;
+				&lt;h5&gt;PSSudo&lt;/h5&gt;
+				&lt;p&gt;Fancy script to execute things elevated&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/samba-adc-image&#34;&gt;
+				&lt;h5&gt;samba-adc-image&lt;/h5&gt;
+				&lt;p&gt;Samba Active Directory Controller Docker Image&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;1&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;1&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/service.control.red&#34;&gt;
+				&lt;h5&gt;service.control.red&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/SmartThings&#34;&gt;
+				&lt;h5&gt;SmartThings&lt;/h5&gt;
+				&lt;p&gt;SmartThings open-source DeviceTypeHandlers and SmartApps code&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/typings-react-desktop&#34;&gt;
+				&lt;h5&gt;typings-react-desktop&lt;/h5&gt;
+				&lt;p&gt;Typings for react-desktop&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/u8g2&#34;&gt;
+				&lt;h5&gt;u8g2&lt;/h5&gt;
+				&lt;p&gt;U8glib library for monochrome displays, version 2 &lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/uwp-js-test&#34;&gt;
+				&lt;h5&gt;uwp-js-test&lt;/h5&gt;
+				&lt;p&gt;&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;0&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;0&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+	
+		
+			&lt;a href=&#34;https://github.com/erichiller/vim-ehlog&#34;&gt;
+				&lt;h5&gt;vim-ehlog&lt;/h5&gt;
+				&lt;p&gt;log analyzation vim plugin (colors, expansion)&lt;/p&gt;
+				&lt;span class=&#34;github&#34;&gt;See on Github&lt;/span&gt;
+				&lt;span class=&#34;watch&#34;&gt;1&lt;/span&gt;
+				&lt;span class=&#34;star&#34;&gt;1&lt;/span&gt;
+			&lt;/a&gt;
+	
+
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

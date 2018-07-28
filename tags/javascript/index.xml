@@ -1,0 +1,379 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hiller.pro</title>
+    <link>https://www.hiller.pro/tags/javascript/index.xml</link>
+    <description>Recent content on Hiller.pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Eric Hiller</copyright>
+    <atom:link href="https://www.hiller.pro/tags/javascript/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Setting up Search on a Static Website</title>
+      <link>https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website</link>
+      <pubDate>Sun, 15 Nov 2015 12:00:00 -0800</pubDate>
+      
+      <guid>https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website</guid>
+      <description>&lt;p&gt;Creating a static website has a number of advantages, not least of which is speed. However there can certainly be some difficulties in creating ease-of-use features for visitors. One such feature that I wanted for this site, was a on-site search feature, as my intention is gradually convert my local documentation and upload it. In order for me to implement this I had to find a client-side solution as the server was to be entirely static, enter &lt;a href=&#34;https://lunrjs.com/&#34;&gt;lunr.js&lt;/a&gt;. lunr.js is written in javascript, and has an indexer that runs on node on your local machine, goes over your site files generating a json index file, then has a search library that you call from your web frontend (and thus in the client&amp;rsquo;s browser) which reads and searches that index file. This allows for your site to stay static, and still have the dynamic feature of search. Thanks to these clever folks, search implementation became a snap for my static, hugo powered website.&lt;/p&gt;
+
+&lt;p&gt;Here I have put together a gist on how to get up and running:&lt;/p&gt;
+
+
+
+&lt;div class=&#34;gist&#34;&gt;
+	
+		&lt;h1 id=&#34;gist-description&#34;&gt;Gist Description&lt;/h1&gt;
+
+&lt;blockquote&gt;
+&lt;p&gt;How to implement a custom search for &lt;a href=&#34;http://gohugo.io&#34;&gt;Hugo&lt;/a&gt; usig &lt;a href=&#34;http://gruntjs.com&#34;&gt;Gruntjs&lt;/a&gt; and &lt;a href=&#34;http://lunrjs.com&#34;&gt;Lunrjs&lt;/a&gt;.&lt;br /&gt;
+Updated from original to allow for url page changes, more detailed install instructions.&lt;br /&gt;
+See More at &lt;a href=&#34;www.hiller.pro&#34;&gt;www.hiller.pro&lt;/a&gt;&lt;br /&gt;
+Thanks to &lt;a href=&#34;https://gist.github.com/sebz/efddfc8fdcb6b480f567&#34;&gt;sebz&lt;/a&gt; for the initial writeup!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&#34;requirements&#34;&gt;Requirements&lt;/h2&gt;
+
+&lt;p&gt;Requires &lt;a href=&#34;https://github.com/joyent/node/wiki/Installing-Node.js-via-package-manager&#34;&gt;Nodejs&lt;/a&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;setup&#34;&gt;Setup&lt;/h2&gt;
+
+&lt;h3 id=&#34;project-organization&#34;&gt;Project organization&lt;/h3&gt;
+
+&lt;p&gt;Here is my Hugo based website project structure&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;	MySite/
+		|- src/ &amp;lt;= Hugo source (private) root folder
+			|- content &amp;lt;= .md content folders &amp;amp; files
+			|- layout/
+				|- static
+				|- js/
+					|- pindex.json &amp;lt;= Where we generate the lunr json index file
+					|- lunrjs.min.js &amp;lt;= lunrjs library
+					|- ...
+			|- ...
+			|- config.toml
+		|- indexer/ &amp;lt;= lunr and associated node files
+			|- node_modules/ &amp;lt;- node dependencies
+			|- Gruntfile.js &amp;lt;= Where the magic happens (see below)
+			|- package.json &amp;lt;= Dependencies declaration required to build the index
+		|- ...
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;install-the-nodejs-dependencies&#34;&gt;Install the Nodejs dependencies&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://github.com/BinaryMuse/toml-node&#34;&gt;toml&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://gruntjs.com/getting-started&#34;&gt;grunt&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://stringjs.com/&#34;&gt;string&lt;/a&gt;
+
+&lt;ul&gt;
+&lt;li&gt;Used to parse the Frontmatter, mine is in TOML&lt;/li&gt;
+&lt;li&gt;Otherwise you can install &lt;a href=&#34;https://www.npmjs.com/package/yamljs&#34;&gt;yamljs&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;Navigate to the folder you wish to install the indexer into (in the above example &lt;code&gt;MySite/indexer&lt;/code&gt;; and issue the commands:&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;touch package.json&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;npm --global install grunt-cli&lt;/code&gt;&lt;br /&gt;
+&lt;code&gt;npm install --save-dev grunt string toml&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;create the Gruntfile.js (see below)&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;em&gt;Note I modified the Gruntfile.js to allow for changed urls&lt;/em&gt;&lt;/p&gt;
+
+&lt;h2 id=&#34;time-to-work&#34;&gt;Time to work&lt;/h2&gt;
+
+&lt;h3 id=&#34;the-principle&#34;&gt;The principle&lt;/h3&gt;
+
+&lt;p&gt;We will work both at buildtime and runtime. With Gruntjs (buildtime), we&amp;rsquo;ll generate a JSON index file and with a small js script (runtime) initilize and use lunrjs.&lt;/p&gt;
+
+&lt;h3 id=&#34;build-the-lunr-index-file&#34;&gt;Build the Lunr index file&lt;/h3&gt;
+
+&lt;p&gt;Lunrjs allows you to define fields to describe your pages (documents in lunrjs terms) that will be used to search and hopefully find stuff. The index file is basically a JSON file corresponding to an array of all the documents (pages) composing the website.&lt;/p&gt;
+
+&lt;p&gt;Here are the fields I chose to describe my pages:&lt;/p&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;title&lt;/code&gt; =&amp;gt; Frontmatter title or file name&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;tags&lt;/code&gt; =&amp;gt; Frontmatter tags or nothing&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;content&lt;/code&gt; =&amp;gt; File content&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ref&lt;/code&gt; =&amp;gt; Reworked file path used as absolute URL&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;ref&lt;/code&gt; can be drawn either from the directory position within &lt;code&gt;content&lt;/code&gt; or from the &lt;code&gt;url&lt;/code&gt; field within the frontmatter&lt;/p&gt;
+
+&lt;h4 id=&#34;workflow&#34;&gt;Workflow&lt;/h4&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Recursively walk through all files of the &lt;code&gt;content&lt;/code&gt; folder&lt;/li&gt;
+&lt;li&gt;Two possibilities
+
+&lt;ol&gt;
+&lt;li&gt;Markdown file
+
+&lt;ol&gt;
+&lt;li&gt;Parse the Frontmatter to extract the &lt;code&gt;title&lt;/code&gt; and the &lt;code&gt;tags&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Parse and clean the content&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;HTML file
+
+&lt;ol&gt;
+&lt;li&gt;Parse and clean the content&lt;/li&gt;
+&lt;li&gt;Use the file name as &lt;code&gt;title&lt;/code&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+&lt;li&gt;Use the path file as &lt;code&gt;ref&lt;/code&gt; (link toward the page)&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h4 id=&#34;show-me-the-code&#34;&gt;Show me the code!&lt;/h4&gt;
+
+&lt;p&gt;Here is the &lt;code&gt;Gruntfile.js&lt;/code&gt; file:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;
+var toml = require(&amp;quot;toml&amp;quot;);
+var S = require(&amp;quot;string&amp;quot;);
+
+var CONTENT_PATH_PREFIX = &amp;quot;../src/content&amp;quot;;
+var SITE_IDX_DEST = &amp;quot;../src/static/js/pindex.json&amp;quot;;
+
+module.exports = function(grunt) {
+
+    grunt.registerTask(&amp;quot;lunr-index&amp;quot;, function() {
+
+        grunt.log.writeln(&amp;quot;Build pages index&amp;quot;);
+
+        var indexPages = function() {
+            var pagesIndex = [];
+            grunt.file.recurse(CONTENT_PATH_PREFIX, function(abspath, rootdir, subdir, filename) {
+                grunt.verbose.writeln(&amp;quot;Parse file:&amp;quot;,abspath);
+                pagesIndex.push(processFile(abspath, filename));
+            });
+
+            return pagesIndex;
+        };
+
+        var processFile = function(abspath, filename) {
+            var pageIndex;
+
+            if (S(filename).endsWith(&amp;quot;.html&amp;quot;)) {
+                pageIndex = processHTMLFile(abspath, filename);
+            } else {
+                pageIndex = processMDFile(abspath, filename);
+            }
+
+            return pageIndex;
+        };
+
+        var processHTMLFile = function(abspath, filename) {
+            var content = grunt.file.read(abspath);
+            var pageName = S(filename).chompRight(&amp;quot;.html&amp;quot;).s;
+            var href = S(abspath)
+                .chompLeft(CONTENT_PATH_PREFIX).s;
+            return {
+                title: pageName,
+                href: href,
+                content: S(content).trim().stripTags().stripPunctuation().s
+            };
+        };
+
+        var processMDFile = function(abspath, filename) {
+            var content = grunt.file.read(abspath);
+			grunt.log.ok(&amp;quot;READING FILE:&amp;quot; + abspath)
+            var pageIndex;
+            // First separate the Front Matter from the content and parse it
+            content = content.split(&amp;quot;+++&amp;quot;);
+            var frontMatter;
+            try {
+                frontMatter = toml.parse(content[1].trim());
+            } catch (e) {
+                grunt.log.error(&amp;quot;ERROR WHILST PROCESSING: &amp;quot; + abspath + e.message);
+            }
+			if (frontMatter.url) {
+				var href = frontMatter.url;
+			} else {
+				var href = S(abspath).chompLeft(CONTENT_PATH_PREFIX).chompRight(&amp;quot;.md&amp;quot;).s;
+				// href for index.md files stops at the folder name
+				if (filename === &amp;quot;index.md&amp;quot;) {
+					href = S(abspath).chompLeft(CONTENT_PATH_PREFIX).chompRight(filename).s;
+				}
+			}
+
+
+            // Build Lunr index for this page
+            pageIndex = {
+                title: frontMatter.title,
+                tags: frontMatter.tags,
+                href: href,
+                content: S(content[2]).trim().stripTags().stripPunctuation().s
+            };
+
+            return pageIndex;
+        };
+
+        grunt.file.write(SITE_IDX_DEST, JSON.stringify(indexPages()));
+        grunt.log.ok(&amp;quot;Index built&amp;quot;);
+    });
+};
+
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Example index file looks like:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-js&#34;&gt;[{
+    &amp;quot;title&amp;quot;: &amp;quot;Page1&amp;quot;,
+    &amp;quot;href&amp;quot;: &amp;quot;/section/page1&amp;quot;,
+    &amp;quot;content&amp;quot;: &amp;quot; This is the cleaned content of &#39;site/content/section/page1.md&#39; &amp;quot;
+}, {
+    &amp;quot;title&amp;quot;: &amp;quot;Page2&amp;quot;,
+    &amp;quot;tags&amp;quot;: [&amp;quot;tag1&amp;quot;, &amp;quot;tag2&amp;quot;, &amp;quot;tag3&amp;quot;],
+    &amp;quot;href&amp;quot;: &amp;quot;/section/page2&amp;quot;,
+    &amp;quot;content&amp;quot;: &amp;quot; This is the cleaned content of &#39;site/content/section/page2.md&#39; &amp;quot;
+}, {
+    &amp;quot;title&amp;quot;: &amp;quot;Page3&amp;quot;,
+    &amp;quot;href&amp;quot;: &amp;quot;/section/page3&amp;quot;,
+    &amp;quot;content&amp;quot;: &amp;quot; This is the cleaned content of &#39;site/content/section/page3.md&#39; &amp;quot;
+}]
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Launch the task: &lt;code&gt;grunt lunr-index&lt;/code&gt; or to run from any directory &lt;code&gt;grunt --gruntfile the/remote/directory/indexer/Gruntfile.js lunr-index&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;use-the-index&#34;&gt;Use the index&lt;/h3&gt;
+
+&lt;p&gt;On the client side here is a small usage example:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html&amp;gt;
+
+&amp;lt;head&amp;gt;
+    &amp;lt;title&amp;gt;Hugo + Lunrjs = &amp;amp;lt;3 search &amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+
+&amp;lt;body&amp;gt;
+    Search:
+    &amp;lt;input id=&amp;quot;search&amp;quot; type=&amp;quot;text&amp;quot;&amp;gt;
+    &amp;lt;br&amp;gt; Results:
+    &amp;lt;ul id=&amp;quot;results&amp;quot;&amp;gt;
+    &amp;lt;/ul&amp;gt;
+    &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;https://code.jquery.com/jquery-2.1.3.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script type=&amp;quot;text/javascript&amp;quot; src=&amp;quot;js/vendor/lunr.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script type=&amp;quot;text/javascript&amp;quot;&amp;gt;
+    var lunrIndex,
+        $results,
+        pagesIndex;
+
+    // Initialize lunrjs using our generated index file
+    function initLunr() {
+        // First retrieve the index file
+        $.getJSON(&amp;quot;js/lunr/PagesIndex.json&amp;quot;)
+            .done(function(index) {
+                pagesIndex = index;
+                console.log(&amp;quot;index:&amp;quot;, pagesIndex);
+
+                // Set up lunrjs by declaring the fields we use
+                // Also provide their boost level for the ranking
+                lunrIndex = lunr(function() {
+                    this.field(&amp;quot;title&amp;quot;, {
+                        boost: 10
+                    });
+                    this.field(&amp;quot;tags&amp;quot;, {
+                        boost: 5
+                    });
+                    this.field(&amp;quot;content&amp;quot;);
+
+                    // ref is the result item identifier (I chose the page URL)
+                    this.ref(&amp;quot;href&amp;quot;);
+                });
+
+                // Feed lunr with each file and let lunr actually index them
+                pagesIndex.forEach(function(page) {
+                    lunrIndex.add(page);
+                });
+            })
+            .fail(function(jqxhr, textStatus, error) {
+                var err = textStatus + &amp;quot;, &amp;quot; + error;
+                console.error(&amp;quot;Error getting Hugo index flie:&amp;quot;, err);
+            });
+    }
+
+    // Nothing crazy here, just hook up a listener on the input field
+    function initUI() {
+        $results = $(&amp;quot;#results&amp;quot;);
+        $(&amp;quot;#search&amp;quot;).keyup(function() {
+            $results.empty();
+
+            // Only trigger a search when 2 chars. at least have been provided
+            var query = $(this).val();
+            if (query.length &amp;lt; 2) {
+                return;
+            }
+
+            var results = search(query);
+
+            renderResults(results);
+        });
+    }
+
+    /**
+     * Trigger a search in lunr and transform the result
+     *
+     * @param  {String} query
+     * @return {Array}  results
+     */
+    function search(query) {
+        // Find the item in our index corresponding to the lunr one to have more info
+        // Lunr result: 
+        //  {ref: &amp;quot;/section/page1&amp;quot;, score: 0.2725657778206127}
+        // Our result:
+        //  {title:&amp;quot;Page1&amp;quot;, href:&amp;quot;/section/page1&amp;quot;, ...}
+        return lunrIndex.search(query).map(function(result) {
+                return pagesIndex.filter(function(page) {
+                    return page.href === result.ref;
+                })[0];
+            });
+    }
+
+    /**
+     * Display the 10 first results
+     *
+     * @param  {Array} results to display
+     */
+    function renderResults(results) {
+        if (!results.length) {
+            return;
+        }
+
+        // Only show the ten first results
+        results.slice(0, 10).forEach(function(result) {
+            var $result = $(&amp;quot;&amp;lt;li&amp;gt;&amp;quot;);
+            $result.append($(&amp;quot;&amp;lt;a&amp;gt;&amp;quot;, {
+                href: result.href,
+                text: &amp;quot;» &amp;quot; + result.title
+            }));
+            $results.append($result);
+        });
+    }
+
+    // Let&#39;s get started
+    initLunr();
+
+    $(document).ready(function() {
+        initUI();
+    });
+    &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+
+&amp;lt;/html&amp;gt;
+
+&lt;/code&gt;&lt;/pre&gt;
+
+	
+&lt;/div&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

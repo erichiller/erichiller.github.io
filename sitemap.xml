@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  
+  <url>
+    <loc>https://www.hiller.pro/</loc>
+    <lastmod>2016-01-30T22:16:07-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/2016/01/30/the-isp-fix</loc>
+    <lastmod>2016-01-30T22:16:07-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/2015/12/06/installing-openssh-server-on-windows</loc>
+    <lastmod>2015-12-06T12:00:00-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/2015/11/16/creating-dnsmasq-qpkg</loc>
+    <lastmod>2015-11-16T12:00:00-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/2015/11/15/setting-up-search-on-a-static-website</loc>
+    <lastmod>2015-11-15T12:00:00-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/2015/11/14/inaugural-post</loc>
+    <lastmod>2015-11-14T12:00:00-08:00</lastmod>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/about/</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/search/</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  
+  <url>
+    <loc>https://www.hiller.pro/code/</loc>
+    <changefreq>daily</changefreq>
+  </url>
+  
+</urlset>

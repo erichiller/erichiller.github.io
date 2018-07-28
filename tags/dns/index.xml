@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hiller.pro</title>
+    <link>https://www.hiller.pro/tags/dns/index.xml</link>
+    <description>Recent content on Hiller.pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Eric Hiller</copyright>
+    <atom:link href="https://www.hiller.pro/tags/dns/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Creating dnsmasq QPKG</title>
+      <link>https://www.hiller.pro/2015/11/16/creating-dnsmasq-qpkg</link>
+      <pubDate>Mon, 16 Nov 2015 12:00:00 -0800</pubDate>
+      
+      <guid>https://www.hiller.pro/2015/11/16/creating-dnsmasq-qpkg</guid>
+      <description>
+
+&lt;p&gt;In this article I am going to describe the steps I took to create the &lt;a href=&#34;https://www.thekelleys.org.uk/dnsmasq/doc.html&#34;&gt;dnsmasq&lt;/a&gt; &lt;a href=&#34;https://www.qnap.com/i/useng/&#34;&gt;qpkg&lt;/a&gt;, which is an ongoing project I have, and is &lt;a href=&#34;https://github.com/erichiller/dnsmasq-qpkg&#34;&gt;listed on github as dnsmasq-qpkg&lt;/a&gt;. I started this project back at the end of August 2015, because I wanted a &lt;a href=&#34;https://en.wikipedia.org/wiki/Name_server&#34;&gt;DNS server&lt;/a&gt; for my home that would allow me to:&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;Cache queries for increased speed / not call out the ISP&lt;/li&gt;
+&lt;li&gt;Avoid ad-queries, where the ISP returns Paid sites instead of NXDOMAIN (site not found)&lt;/li&gt;
+&lt;li&gt;(and most importantly) I have a lot of hosts as I am always testing something (mostly VMs and Raspberry PIs) I wanted to run shortnames so I didn&amp;rsquo;t have to remember a thousand (not literally) IP addresses, ESPECIALLY when it came to IPv6.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;I knew of dnsmasq from back in the glory days of running an ISP, not that I used it, as it was not multi-threaded, nor designed for large deployments, but it was lightweight and perfect for a household / SOHO (small business) environment. Many home router &lt;a href=&#34;https://openwrt.org/&#34;&gt;linux / BSD distros&lt;/a&gt; use it and it is known to be of high stability, fast, and feature rich. I looked at other software, but the choice was made relatively quickly.&lt;/p&gt;
+
+&lt;p&gt;After choosing dnsmasq, the choice of host was up next. As I mentioned, I had a number of Raspberry PIs, of cource a home router (Netgear R7000), and Virtual Machines. The Virtual Machines were all running on (at the time) a QNAP HS-251, which I later upgraded to a QNAP TS-453mini, both of which run &lt;a href=&#34;https://wiki.qemu.org/Main_Page&#34;&gt;QEMU&lt;/a&gt; underneath.  Turns out that support for 3rd party distros / OSes on the Netgear R7000 is lacking at best, I would be several revisions behind, not that it is a huge deal, but the other issue was, that in my experience, 3rd party distros, while amazing for wired and network services, leave a lot to be desired when it comes to wireless performance. I&amp;rsquo;ve never had great luck with htme in that respect. I tossed the idea of router as the dns host, even though that would have been by far the easiest solution, but hey, what can I say, I like to make life difficult (especially when it makes projects for me).&lt;/p&gt;
+
+&lt;p&gt;Next up was the raspberry pi, and truth be told, I am breaking these things more than they are running. I am constantly writing stuff for them, or formatting them and reinstalling, which would be terrible for a DNS server, which is arguably the most important component of the network, or at least tied with the router and switches. And lastly was the Virtual Machine(s). I had the same issue as the Raspberry Pis, in that they are always go up and down. Sure I could have kept one persistent, but I don&amp;rsquo;t trust the virtual MACs and the fast that QNAP has to boot the Virtual Machine AFTER it boots, thus it boots up far after QNAP and the rest of the network itself, leaving a large gap of dnslessness (hey I coined a term). I really wanted to run it on metal, and it wasn&amp;rsquo;t going to be my windows desktop. I&amp;rsquo;d prefer to not buy anymore software when I had this perfectly beefly QNAP NAS sitting right there, doing next to nothing. QNAP it was!&lt;/p&gt;
+
+&lt;p&gt;Now the fun began. QNAP runs linux, sure, but it is an incredibly barebones linux. I mean baaaarrreeeeboneeesss. And to make less barebones is a pain in the rear. QNAP does provide the source for their QTS, but only for (at the time of this writing and the initial qpkg creation) 4.1.3. Well QTS 4.2.0 was freshly out, and I wanted to make use of some of its features. And I really didn&amp;rsquo;t feel like getting into compiling my own kernel. This meant compiling a binary elsewhere and bringing it over. It had to have &lt;em&gt;as few dependencies as possible&lt;/em&gt; because QTS doesn&amp;rsquo;t provide much in the way of libraries. Initially I was just going to compile it, scp it over and be done, bam 1 day of work. Well it ended up being weekends of work, so at that point I figured I&amp;rsquo;d at least let other people make use of the project, as during the course of doing research for it I found a number of other people with the same request. And if I was going to let it out into the wilds of the internet I may as well make it more valuable that a binary that had to be SCPed onto the box. So I set about making a nice QPKG, and web interface, and generally making it more usable and user friendly.&lt;/p&gt;
+
+&lt;p&gt;I&amp;rsquo;m going to write up a series of articles about how I went about all of this, but I&amp;rsquo;m going to start off with the (relatively raw notes from my) process for creating the binary and qpkg. If this helps someone port to another processor / sytem architecture I would &lt;strong&gt;GREATLY&lt;/strong&gt; appreciate your addition to my &lt;a href=&#34;https://github.com/erichiller/dnsmasq-qpkg&#34;&gt;github repo&lt;/a&gt; or if you have any other additions at all, I welcome contributors / contributions! Please let me know if you have any questions, suggestions or tips.&lt;/p&gt;
+
+&lt;h1 id=&#34;dnsmasq-qpkg-creation&#34;&gt;dnsmasq Qpkg creation&lt;/h1&gt;
+
+&lt;h1 id=&#34;os-setup-libs&#34;&gt;OS setup &amp;amp; libs&lt;/h1&gt;
+
+&lt;h2 id=&#34;centos&#34;&gt;Centos&lt;/h2&gt;
+
+&lt;p&gt;Install the git pacakge&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;yum install git
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Install libidn from source&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;wget https://ftp.gnu.org/gnu/libidn/libidn-1.32.tar.gz
+tar -zxvf libidn-1.32.Qtar.gz
+cd libidn-1.32
+./configure
+make
+make install
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;** Only used Centos for 64-bit build **&lt;/p&gt;
+
+&lt;h2 id=&#34;debian&#34;&gt;Debian&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;(4r8 i386 is the closest; Run Old Debian Etch 4r8)&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Setup the apt sources to:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;deb https://snapshot.debian.org/archive/debian/20100101T152753Z/ etch main
+deb-src https://snapshot.debian.org/archive/debian/20100101T152753Z/ etch main
+
+deb https://snapshot.debian.org/archive/debian/20100101T152753Z/ etch contrib
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h3 id=&#34;required-libraries&#34;&gt;required libraries&lt;/h3&gt;
+
+&lt;p&gt;&lt;code&gt;apt-get install build-essential git libidn11-dev&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;NOTE: static linking requires &lt;code&gt;libX.a&lt;/code&gt; where X is the library abbreviation&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;dnsmasq&#34;&gt;dnsmasq&lt;/h1&gt;
+
+&lt;p&gt;&lt;code&gt;git clone git://thekelleys.org.uk/dnsmasq.git&lt;/code&gt;
+or download the tar.gz file
+&lt;code&gt;tar -zxvf dnsmasq-xxx-tar.gz&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;in &lt;code&gt;src/config.h&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Uncomment &lt;code&gt;#define HAVE_IDN&lt;/code&gt; and add the line &lt;code&gt;#define HAVE_IDN_STATIC&lt;/code&gt; (must have both).&lt;/p&gt;
+
+&lt;p&gt;Inotify won’t work unless you upgrade to 2.5 glibc minumum, which is experimental on etch, so I just turned inotify off; uncomment &lt;code&gt;#define NO_INOTIFY&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;From the &lt;code&gt;dnsmasq&lt;/code&gt; directory&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;make&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;notes&#34;&gt;Notes&lt;/h1&gt;
+
+&lt;p&gt;To compile dnsmasq with uclibc try using gmake by &lt;code&gt;make MAKE=gmake&lt;/code&gt; and altering settings in src/config.h&lt;/p&gt;
+
+&lt;h1 id=&#34;some-useful-commands&#34;&gt;Some Useful Commands&lt;/h1&gt;
+
+&lt;p&gt;&lt;strong&gt;list groups&lt;/strong&gt;
+&lt;code&gt;cut -d: -f1 /etc/group&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;scp root@testy:/root/dnsmasq/src/dnsmasq dnsmasq&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;scp src/dnsmasq admin@host:/tmp&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;** see dependencies of library **
+&lt;code&gt;ldd &amp;lt;binary&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;** see library version **
+&lt;code&gt;readelf -V /path/to/library.so&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;** opkg list and search for &amp;lsquo;man&amp;rsquo; adding a new line between each entry **&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;opkg list | grep man | awk &#39;{print $0,&amp;quot;\n&amp;quot;}&#39;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;opkg installations&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;opkg install git make
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;** SSH Keygen - create public &amp;amp; private key **&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ssh-keygen -N dnsmasq -t rsa -C &amp;quot;auto reboot dnsmasq webui&amp;quot; -f /share/CACHEDEV1_DATA/.qpkg/dnsmasq/id_rsa
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;** remove password from ssh key **&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;openssl rsa -in id_rsa -out id_rsa_npw -passin pass:dnsmasq
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;reboot via localhost ssh login:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;ssh -i /share/CACHEDEV1_DATA/.qpkg/dnsmasq/id_rsa_npw -o StrictHostKeyChecking=no admin@localhost &amp;quot;/etc/init.d/dnsmasq.sh restart&amp;quot;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;linux-information&#34;&gt;Linux Information&lt;/h1&gt;
+
+&lt;h2 id=&#34;name-service-switch&#34;&gt;name service switch&lt;/h2&gt;
+
+&lt;p&gt;NSS ( name service switch ) is provided by libc and is one of the primary reasons NOT to bundle libc statically, it will almost always break. Also, when you get a &lt;code&gt;user not found&lt;/code&gt; error on another machine even though the user does &lt;em&gt;positively&lt;/em&gt; exist, its probably because the binary isn&amp;rsquo;t linked properly to libc, which provides NSS, and access to &lt;code&gt;getpwnam&lt;/code&gt;, etc&amp;hellip;&lt;/p&gt;
+
+&lt;p&gt;NSS tells the libc function &lt;code&gt;getpwnam&lt;/code&gt; where to look for users, groups&lt;/p&gt;
+
+&lt;p&gt;NSS was not working on my initial build because it was not properly linked to x86_64 libraries. I had to link dynamically via ldconfig&lt;/p&gt;
+
+&lt;p&gt;Check lib mapping / dependencies with ldd&lt;/p&gt;
+
+&lt;h1 id=&#34;ipv6&#34;&gt;IPv6&lt;/h1&gt;
+
+&lt;p&gt;** View IPv6 routes (linux) **
+&lt;code&gt;ip -6 route&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;Debian (and potentially other distros) may need another DHCP client besides the default ISC dhcpc, try:
+&lt;code&gt;apt-get install dhcpcd5&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;If you have a router or other devices on the network ensure router is set to &lt;strong&gt;IP Address Assignment=Use DHCP Server&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;Here is a &lt;a href=&#34;https://egustafson.github.io/ipv6-dhcpv6.html&#34;&gt;sample dnsmasq config&lt;/a&gt; as well as a dhcp client setup for linux.&lt;/p&gt;
+
+&lt;p&gt;&lt;a href=&#34;https://www.juniper.net/techpubs/en_US/junos13.3/topics/topic-map/ipv6-interfaces-neighbor-discovery.html&#34;&gt;Juniper has an excellent sample Router Advertisement article&lt;/a&gt;&lt;/p&gt;
+
+&lt;p&gt;For the various IPv6 dhcp modes, see the &lt;a href=&#34;https://www.thekelleys.org.uk/dnsmasq/docs/dnsmasq-man.html&#34;&gt;dnsmasq manpage - scroll down to &amp;lsquo;dhcp-range&amp;rsquo;&lt;/a&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;notes-on-qts-structure&#34;&gt;Notes on QTS structure&lt;/h1&gt;
+
+&lt;h2 id=&#34;kernel-version&#34;&gt;Kernel version&lt;/h2&gt;
+
+&lt;p&gt;via &lt;code&gt;uname -r&lt;/code&gt;:&lt;/p&gt;
+
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Distro&lt;/th&gt;
+&lt;th&gt;Kernel&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;CentOS 7&lt;/td&gt;
+&lt;td&gt;3.10.0-229.el7.x86_64&lt;/td&gt;
+&lt;/tr&gt;
+
+&lt;tr&gt;
+&lt;td&gt;QNAP 4.2.0 rc5&lt;/td&gt;
+&lt;td&gt;3.12.6&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;PHP binary / exe location on QNAP is &lt;code&gt;/mnt/ext/opt/apache/bin/php&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;The way I had 64-bit libs working before was to:&lt;br /&gt;
+add &lt;code&gt;/share/CACHEDEV1_DATA/.qpkg/HD_Station/lib/x86_64-linux-gnu/&lt;/code&gt;&lt;br /&gt;
+to &lt;code&gt;/etc/ld.so.conf&lt;/code&gt;&lt;br /&gt;
+then run &lt;code&gt;ldconfig&lt;/code&gt; to refresh the cache&lt;br /&gt;
+** this has to be done in the dnsmasq init script as &lt;code&gt;/etc/ld.so.conf&lt;/code&gt; is reset upon reboot.&lt;/p&gt;
+
+&lt;p&gt;view the current libraries and their dependencies and locations via &lt;code&gt;ldconfig -p&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;strong&gt;ENSURE IPV6 IS ENABLED on nas&lt;/strong&gt;&lt;br /&gt;
+can check for IPV6 in &lt;code&gt;/etc/config/uLinux.conf&lt;/code&gt;&lt;br /&gt;
+under Network section IPV6 = TRUE / FALSE&lt;/p&gt;
+
+&lt;h2 id=&#34;notes-on-qdk-qpkg&#34;&gt;Notes on QDK &amp;amp; QPKG&lt;/h2&gt;
+
+&lt;p&gt;located in &lt;code&gt;/share/CACHEDEV1_DATA/.qpkg/QDK/&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;qdk is the init script to the qbuild application in /usr/bin.&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;qbuild&lt;/code&gt; is the build script&lt;/p&gt;
+
+&lt;p&gt;qinstall.sh is the install script&lt;/p&gt;
+
+&lt;p&gt;QNAP qpkg descriptions are in &lt;code&gt;/etc/config/rssdoc/qpkgcenter.xml&lt;/code&gt; but that file is updated every so often, so even if I dropped some info in there it would get erased the next time the cache was updated&lt;/p&gt;
+
+&lt;h3 id=&#34;read-only-variables-in-qdk-qbuild&#34;&gt;READ ONLY variables in QDK qbuild&lt;/h3&gt;
+
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;SYS_CONFIG_DIR -&amp;gt; &lt;code&gt;/etc/config&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;SYS_INIT_DIR -&amp;gt; &lt;code&gt;/etc/init.d&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;SYS_RSS_IMG_DIR -&amp;gt; &lt;code&gt;/home/httpd/RSS/images&lt;/code&gt;&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;SYS_QPKG_DIR -&amp;gt; Location of installed software&lt;/p&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;icons go to: &lt;code&gt;/home/httpd/RSS/images/&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;qpkg-config&#34;&gt;QPKG config&lt;/h3&gt;
+
+&lt;p&gt;Installed QPKG and its config data is registered in &lt;code&gt;/etc/config/qpkg.conf&lt;/code&gt;&lt;/p&gt;
+
+&lt;h3 id=&#34;getcfg&#34;&gt;getcfg&lt;/h3&gt;
+
+&lt;p&gt;Command takes the form of&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;getcfg &amp;lt;section&amp;gt; &amp;lt;field&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;&lt;code&gt;-u&lt;/code&gt; flag converts to uppercase&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;-d &amp;quot;DEFAULTTEXT&amp;quot;&lt;/code&gt; flag returns DEFAULTTEXT if field is not found&lt;/p&gt;
+
+&lt;p&gt;getcfg is looking for a file of structure (such as &lt;code&gt;/etc/config/qpkg.conf&lt;/code&gt; )&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;[section]
+field=value
+field=&amp;quot;val ue third&amp;quot;
+field = value
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;conclusion-and-more-to-come&#34;&gt;Conclusion and more to come&amp;hellip;&lt;/h1&gt;
+
+&lt;p&gt;I hope that this at least outlined the QTS structure and process to make dnsmasq build that is compatible with QTS. There may be some gaps, and if you find any please do let me know, and I will fill them in. I plan to regularly update the GUI and add addtional features in the future, and work love to add ARM builds of dnsmasq. I&amp;rsquo;d love to hear how you all are using dnsmasq in your networks as well, especially if it is in larger deployments.&lt;/p&gt;
+
+&lt;p&gt;-Eric&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>

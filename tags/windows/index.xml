@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Hiller.pro</title>
+    <link>https://www.hiller.pro/tags/windows/index.xml</link>
+    <description>Recent content on Hiller.pro</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <copyright>Eric Hiller</copyright>
+    <atom:link href="https://www.hiller.pro/tags/windows/index.xml" rel="self" type="application/rss+xml" />
+    
+    <item>
+      <title>Installing OpenSSH Server on Windows</title>
+      <link>https://www.hiller.pro/2015/12/06/installing-openssh-server-on-windows</link>
+      <pubDate>Sun, 06 Dec 2015 12:00:00 -0800</pubDate>
+      
+      <guid>https://www.hiller.pro/2015/12/06/installing-openssh-server-on-windows</guid>
+      <description>
+
+&lt;p&gt;Back in June of this year &lt;a href=&#34;https://blogs.msdn.com/b/powershell/archive/2015/06/03/looking-forward-microsoft-support-for-secure-shell-ssh.aspx&#34;&gt;Microsoft announced&lt;/a&gt; that they were working on a project to get &lt;code&gt;sshd&lt;/code&gt; working proper on windows. Many, including myself didn&amp;rsquo;t believe it at the time, but then it &lt;a href=&#34;https://blogs.msdn.com/b/powershell/archive/2015/10/19/openssh-for-windows-update.aspx&#34;&gt;surfaced again in October&lt;/a&gt;, this time for real, and I paid attention. I took the time this evening to give it a go, and it does work, and you too can get it up and running in no time flat. Here&amp;rsquo;s a quick how to:&lt;/p&gt;
+
+&lt;h1 id=&#34;server-side&#34;&gt;Server Side&lt;/h1&gt;
+
+&lt;p&gt;First on the machine you intend to be your SSH Server:
+1. Download from the &lt;a href=&#34;https://github.com/PowerShell/Win32-OpenSSH/releases/download/11_09_2015/OpenSSH-Win32.zip&#34;&gt;Win-OpenSSH package&lt;/a&gt;
+2. Extract, and cd into the directory on the command line
+3. In administrative powershell:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;./ssh-keygen.exe -t rsa -f ssh_host_rsa_key
+./sshd.exe install
+net start sshd
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Down the road should you wish to uninstall:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;net stop sshd
+./sshd.exe uninstall
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;client&#34;&gt;Client&lt;/h1&gt;
+
+&lt;p&gt;For the client it is simply&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;./ssh.exe -l user@domain host
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;Then run the service you would like, such as &lt;code&gt;powershell&lt;/code&gt;&lt;/p&gt;
+
+&lt;h1 id=&#34;additional-commands&#34;&gt;Additional Commands&lt;/h1&gt;
+
+&lt;p&gt;You might have to open up the firewall:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;New-NetFirewallRule -Protocol TCP -LocalPort 22 -Direction Inbound -Action Allow -DisplayName SSH
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;p&gt;And if you want to run the ssh server as a service, within powershell run:&lt;/p&gt;
+
+&lt;pre&gt;&lt;code&gt;Set-Service sshd -StartupType Automatic
+&lt;/code&gt;&lt;/pre&gt;
+
+&lt;h1 id=&#34;references&#34;&gt;References&lt;/h1&gt;
+
+&lt;p&gt;For more information see the &lt;a href=&#34;https://github.com/PowerShell/Win32-OpenSSH/wiki/Deploy-Win32-OpenSSH&#34;&gt;docs on github&lt;/a&gt;&lt;/p&gt;
+</description>
+    </item>
+    
+  </channel>
+</rss>
