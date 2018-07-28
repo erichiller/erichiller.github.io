@@ -2,26 +2,26 @@
 .SYNOPSIS
 Publish-Site is a set of functions to allow for quick updates and uploads of my Hugo site.
 .DESCRIPTION
-Allows for management of hugo based site hosted on github. Including building of associated 
+Allows for management of hugo based site hosted on github. Including building of associated
 resources - SASS -> CSS , lunr-index; as well as starting a test server locally. The new page
 config from Hugo can be called here as well
 .PARAMETER RefreshResources
 Takes no parameters
-.PARAMETER CreatePage 
+.PARAMETER CreatePage
 Loads the test editor configured within Hugo, takes <CATEGORY> <TITLE>
-.PARAMETER Category 
+.PARAMETER Category
 Category which the article will be entered into within the site. For example, "blog"
-.PARAMETER Title 
+.PARAMETER Title
 Article Title, this will be made into a URL parseable filename as well.
 .PARAMETER StartServer
 Starts a local server for testing, takes no parameters.
 .PARAMETER Publish
 Builds the site, commits the site (source), and pushes it to be available publicly
 Publish takes the sole (optional) parameter of <COMMIT MESSEAGE>
-Remember that POWERSHELL allows for MULTILINE variables (encapsulate with quotes), 
+Remember that POWERSHELL allows for MULTILINE variables (encapsulate with quotes),
 and that longer commit messages are preferred, so please make use of them!
 .PARAMETER CommitMessage
-Remember that POWERSHELL allows for MULTILINE variables (encapsulate with quotes), 
+Remember that POWERSHELL allows for MULTILINE variables (encapsulate with quotes),
 and that longer commit messages are preferred, so please make use of them!
 .LINK
 https://gohugo.io/overview/introduction/
@@ -73,7 +73,7 @@ function RefreshResources {
 
 function StartServer {
 	Write-Debug "Starting Hugo Server with the configuration located at $config"
-	
+
 	RefreshResources
 
 	& hugo.exe server `
@@ -91,7 +91,7 @@ function CreatePage {
 #	[string (Mandatory=$true) ] $Category,
 #	[string (Mandatory=$true) ] $Title
 #	)
-	
+
 	$CallingDirectory = (Convert-Path . )
 	Set-Location $source
 	& hugo.exe new --config=$config $Category/$Title
@@ -116,11 +116,11 @@ function Publish {
 	Copy-Item (Join-Path $SiteRoot "\CNAME") (Join-Path $SiteRoot "\public\CNAME")
 
 	# update git, adding changes
-	& git add -A 
+	& git add -A
 
 	# commit changes, set message to the date / version
 	$FullCommitMessage = "[$(Get-Date -format "yyyy-MMM-dd HH:mm")] $CommitMessage"
-	Write-Debug "Commiting: $FullCommitMessage" 
+	Write-Debug "Commiting: $FullCommitMessage"
 	& git commit -m "$FullCommitMessage"
 
 	# push the entirety of the source
