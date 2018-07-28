@@ -1,5 +1,5 @@
 # see https://gohugo.io/overview/configuration/ for more information
-baseurl = "https://hiller.pro/"
+baseurl = "https://www.hiller.pro/"
 languageCode = "en-us"
 title = "Hiller.pro"
 canonifyurls = true
