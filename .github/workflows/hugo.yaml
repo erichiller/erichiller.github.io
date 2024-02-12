@@ -1,0 +1,163 @@
+# Build and deploy Hugo site to GitHub Pages
+# Source: https://github.com/actions/starter-workflows/blob/main/pages/hugo.yml
+name: Deploy Hugo site to Pages
+
+on:
+  # Runs on pushes targeting the default branch
+#  push:
+# URGENT: RESTORE?
+#    branches: ["master"]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
+# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+# Default to bash
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  # Build job
+  build:
+    runs-on: ubuntu-latest
+    env:
+      HUGO_VERSION: 0.120.4
+    steps:
+      #
+      - name: Install Hugo CLI
+        run: |
+          wget -O ${{ runner.temp }}/hugo.deb https://github.com/gohugoio/hugo/releases/download/v${HUGO_VERSION}/hugo_extended_${HUGO_VERSION}_linux-amd64.deb \
+          && sudo dpkg -i ${{ runner.temp }}/hugo.deb
+      # 
+      - name: Install Dart Sass
+        run: sudo snap install dart-sass
+      # 
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+      # 
+      # 
+      # https://docs.github.com/en/pages
+      # 
+      - name: Setup Pages
+        id: pages
+        uses: actions/configure-pages@v4
+      # 
+      # KILL ? ↓
+#      - name: Install Node.js dependencies
+#        run: "[[ -f package-lock.json || -f npm-shrinkwrap.json ]] && npm ci || true"
+      #
+      - name: 'Grunt - generate lunr.js index'
+        run: |
+          npm install
+          npm run build-grunt
+      #
+      # 
+      # 
+      - name: Compile CSS
+        # if: ${{ !always() }}
+        run: |
+          # KILL: TESTING
+          # ls -la ./src/static/css/
+          # KILL: TESTING
+          # rm ./src/static/css/main.css
+          #
+          dart-sass ./_scss/main.scss ./src/static/css/main.css
+          # URGENT: or just ./src/public/css
+          # KILL: TESTING
+          # ls -la ./src/static/css/
+          #
+      # 
+      - name: Build with Hugo
+        # working-directory: src
+        env:
+          # For maximum backward compatibility with Hugo modules
+          HUGO_ENVIRONMENT: production
+          HUGO_ENV: production
+        run: |
+          hugo \
+            --source './src' \
+            --destination './public' \
+            --minify \
+            --baseURL "${{ steps.pages.outputs.base_url }}/" \
+            --printPathWarnings \
+            --noBuildLock \
+            --debug \
+            --logLevel debug
+          
+      #
+      - name: 'TESTING - check file output'
+        run: |
+          # hugo gen --help
+          echo "-----------"
+          ls -lR --hide='.git'
+      #
+      - name: Restore lychee cache
+        uses: actions/cache@v3
+        with:
+          path: .lycheecache
+          key: cache-lychee-${{ github.sha }}
+          restore-keys: cache-lychee-
+      # URGENT: ADD cronjob for hiller.pro ; mkmrk.Channels docs
+      # https://github.com/lycheeverse/lychee-action/blob/master/action.yml
+      # https://github.com/lycheeverse/lychee#commandline-parameters
+      # https://github.com/lycheeverse/lychee-action
+      - name: Link Checker
+        # URGENT: RESTORE (fix kb path)
+        if: ${{ !always() }}
+        uses: lycheeverse/lychee-action@v1.9.3
+        with:
+          # Check all markdown and html files in repo (default)
+          #args: --base . --verbose --no-progress './**/*.md' './**/*.html' './**/*.rst'
+          args: >-
+            --verbose
+            --no-progress
+            --cache
+            --max-cache-age 1d
+            './src/public/**/*.md'
+            './src/public/**/*.html'
+          # Use json as output format (instead of markdown)
+          #format: json
+          # Use different output file path
+          output: ./lychee-report.md
+          # Use a custom GitHub token, which 
+          #token: ${{ secrets.CUSTOM_TOKEN }}
+          # Fail action on broken links
+          fail: true
+          jobSummary: true
+          debug: true
+      #- name: 'output lychee report'
+      #  run: |
+      #    cat lychee-report.md >> $GITHUB_STEP_SUMMARY
+      #
+      # https://github.com/actions/upload-pages-artifact
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./src/public
+
+  # Deployment job
+  deploy:
+    # if: ${{ !always() }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

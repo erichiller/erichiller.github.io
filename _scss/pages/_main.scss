@@ -10,7 +10,7 @@
 	}
 	a {
 		text-decoration: none;
-		margin: $spacing-xs auto;
+		margin: $spacing-xs $spacing-xs;
 		background-color:lighten($text-light, 59%);
 		display: inline-block;   
 		line-height: $spacing-s;

@@ -1,15 +1,17 @@
 {{ $urlPre := "https://api.github.com" }}
-{{ $user_json := getJSON $urlPre "/users/" .Page.Site.Params.gituser "/repos" }}
+{{ $user_json := getJSON $urlPre "/users/" .Page.Site.Params.gituser "/repos?sort=pushed&type=owner" }}
 <div class="repolist">
 {{ range $user_json }}
-	{{ if eq .private false }}
-		{{ $repo_json := getJSON $urlPre "/repos/" $.Page.Site.Params.gituser "/" .name }}
-			<a href="{{ $repo_json.html_url }}">
-				<h5>{{ $repo_json.name }}</h5>
-				<p>{{ $repo_json.description }}</p>
+    {{/* or should I display forks?*/}}
+    {{/* if eq .private false */}}
+	{{ if and (eq .private false) (eq .fork false) }}
+		{{/* $repo_json := getJSON $urlPre "/repos/" $.Page.Site.Params.gituser "/" .name */}}
+			<a href="{{ .html_url }}">
+				<h5>{{ .name }}</h5>
+				<p>{{ .description }}</p>
 				<span class="github">See on Github</span>
-				<span class="watch">{{ $repo_json.watchers_count }}</span>
-				<span class="star">{{ $repo_json.stargazers_count }}</span>
+				<span class="watch">{{ .watchers_count }}</span>
+				<span class="star">{{ .stargazers_count }}</span>
 			</a>
 	{{ end }}
 {{ end }}

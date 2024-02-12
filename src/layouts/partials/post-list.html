@@ -2,7 +2,8 @@
 --><main>
     <div id="home">
         <ul class="posts">
-        {{ $paginator := .Paginate (where .Data.Pages.ByDate.Reverse "Type" "blog") 3 }}
+        {{ $paginator := .Paginate (where .Site.RegularPages.ByDate.Reverse "Type" "blog" ) 3 }}
+        
         {{ range $index, $pg := $paginator.Pages }}
             <li itemscope itemtype="//schema.org/BlogPosting">
 				<div class="p-wrap">
@@ -14,7 +15,7 @@
 					</a>
 					{{ partial "taglist" . }}
 					<a href="{{ .Permalink }}" itemprop="url" class="summary">
-						{{ if and (eq $index 0) (eq .URL "")}}
+						{{ if and (eq $index 0) (not (isset .Params "url")) }}
 							<p>
 							{{ if .Params.page_summary }}
 								{{ .Params.page_summary | markdownify }}

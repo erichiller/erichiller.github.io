@@ -1,5 +1,5 @@
 +++
-title = "SiteWide Search"
+title = "Site Search"
 url = "/search/"
 +++
 

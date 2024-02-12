@@ -5,7 +5,7 @@ title = "Hiller.pro"
 canonifyurls = true
 defaultLayout = "main"
 # Editor to use for hugo new contenttype/title.md command
-newContentEditor = "C:\\Program Files (x86)\\Microsoft VS Code\\code.exe"
+newContentEditor = "code"
 archetypedir = "archetypes"
 footnoteAnchorProfix = "^"
 
@@ -30,7 +30,7 @@ pluralizelisttitles = false
 	copyright = "Eric Hiller"
 	gituser = "erichiller"
 	linkedin = "https://www.linkedin.com/in/ericdhiller"
-	stackOverflow = "https://stackoverflow.com/story/ehiller"
+	stackOverflow = "https://stackoverflow.com/users/377252/ehiller"
 
 	# Enable comments by entering your Disqus shortname
 	disqusshortname = "erichiller"
@@ -69,10 +69,11 @@ pluralizelisttitles = false
 	name = "Blog"
 	weight = 20
 	url = "/blog"
-[[menu.site]]
-	name = "Knowledge Base"
-	weight = 30
-	url = "/kb"
+# URGENT: RESTORE kb
+#[[menu.site]]
+#	name = "Knowledge Base"
+#	weight = 30
+#	url = "/kb"
 [[menu.site]]
 	name = "Code"
 	weight = 40
