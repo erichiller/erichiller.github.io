@@ -1,3 +1,6 @@
+# Lychee Link Checker Configuration
+# https://github.com/lycheeverse/lychee/tree/master
+
 #############################  Display  #############################
 
 # Verbose program output
@@ -20,6 +23,9 @@ max_cache_age = "1d"
 
 # Comma-separated list of accepted status codes for valid links.
 accept = [200, 429]
+
+# User agent [default: lychee/x.y.z]
+user-agent = "WebClient/99.137.2"
 
 #############################  Exclusions  ##########################
 
