@@ -29,7 +29,7 @@ accept = [200, 429]
 # Exclude URLs and mail addresses from checking (supports regex).
 # exclude = [ ]
 # Stack Overflow returns 403, probably GitHub IPs are blacklisted
-exclude = [ '^https?://(www)?\.stackoverflow\.com' ]
+exclude = [ '^https?://(www\.)?stackoverflow\.com' ]
 
 # Exclude all private IPs from checking.
 # Equivalent to setting `exclude_private`, `exclude_link_local`, and
